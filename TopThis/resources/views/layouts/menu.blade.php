@@ -1,7 +1,5 @@
 
 
-
-
 <ul id="myId" class="nav"  role="menubar">
    <li role="menuitem"><a href="Index.php">Home</a></li>
    <li role="menuitem">

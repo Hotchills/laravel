@@ -18,10 +18,13 @@
 
    </head>
 
-  <div Style="max-width:1200px;margin:0 auto;">
-      @include('layouts.header')     
+  <div Style="min-width:640px;max-width:960px;margin:0 auto;">
+      <div Style="height: 150px;">
+      @include('layouts.header') 
+      </div>
+      <div Style="height: 80px;">
       @include('layouts.menu')   
-      
+      </div>
       <body>
          
          @yield('content')
