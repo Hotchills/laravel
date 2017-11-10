@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div Style="min-height: 700px;">
+<div class="firstmain">
 
     <div class="panel-heading"><p>Page name : {{$mainpage->name}}</p></div>
     <div class="panel-heading"><p>Page title : {{$mainpage->title}}</p></div>

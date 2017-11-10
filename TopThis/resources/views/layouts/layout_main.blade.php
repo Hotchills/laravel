@@ -15,21 +15,23 @@
       <meta name="csrf-token" content="{{ csrf_token() }}">
 
    <!--  <title>{{ config('app.name', 'Laravel') }}</title>-->
-
+	<meta name="keywords" content="footer, address, phone, icons" />	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">	
+      
+      
    </head>
 
-  <div Style="min-width:640px;max-width:960px;margin:0 auto;">
-      <div Style="height: 150px;">
-      @include('layouts.header') 
-      </div>
-      <div Style="height: 80px;">
+  <div class="site">
+     
+      @include('layouts.header')    
       @include('layouts.menu')   
-      </div>
-      <body>
+     
+
          
          @yield('content')
          
-      </body>
+      
       
       <div class="footer">
          @include('layouts.footer')  
