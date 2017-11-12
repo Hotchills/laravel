@@ -18,3 +18,13 @@ Homestead.json
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
+TopThis/.env - Copy.example
+TopThis/composer.lock
+TopThis/composer.phar
+TopThis/nbproject/private/private.xml
+TopThis/composer.lock
+TopThis/nbproject/private/private.xml
+TopThis/nbproject/private/private.xml
+TopThis/composer.lock
+TopThis/composer.lock
+TopThis/nbproject/private/private.xml

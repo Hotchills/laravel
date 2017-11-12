@@ -15,7 +15,8 @@
             <label for="show"><p Style="font-size: 25px;">Page name :{!! $one !!} </p></label>  
             <span id="content_com"><p>  Main page : {!! $page->mainpage->name !!}&nbsp |&nbsp  Title : {{$page->title}}&nbsp| &nbsp   Body : {{$page->body}}</p></span>  
         </div>
-        <div Style="margin-left:20px;"><p>tops on this category:</p></div>
+        <br>
+        <div Style="margin-left:20px;"><h2>Tops on this category:</h2></div>
         <br>
         @foreach($tops as $top)    
         <div id="top_nr{{$top->id}}" class="top-heading" onclick="show({{$top->id}})">                    
@@ -27,9 +28,9 @@
         <button  onclick="show({{$top->id}})">Show{{$top->id}}</button>
         <div id="idi{{$top->id}}" class="ascunde">
             <h1>{{$top->title}}</h1>             
-            <button onclick="show_comments({{$top->id}})">Try it</button>
+            <button onclick="show_comments({{$top->id}})">Click to add a new comment</button>
 
-            <div id="ds{{$top->id}}" Style="border-radius:5px;display:none;width:100%;border:1px solid grey; padding:5px;">              
+            <div id="ds{{$top->id}}" class="newcommentarea" Style="display: none;">              
                 {{Form::open(['route'=>['comment.store',$top->id],'method'=>'POST'])}}                  
                 {{Form::text('user','user')}}                         
                 {{Form::text('email','Email')}} <br>                 
@@ -41,10 +42,10 @@
             @foreach($top->comments as $comment)
             <br>
             <div class="wrapper_com">
-                <br>
+               
                 <div class="picture_com">picture</div>
-                <div class="header_com">{{$comment->user}}</div>
-                <div class="content_com"><p>{{$comment->body}} </p></div>
+                <div class="header_com"><h4>{{$comment->user}}</h4></div>
+                <div class="content_com"><p>{!! nl2br(e($comment->body)) !!}</p></div>
                 <div class="footer_com">
                     <button onclick="open_comments({{$top->id}})"><a href="#tag">New comment</a></button>
                     <button>Replay</button>  
