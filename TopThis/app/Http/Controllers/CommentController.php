@@ -19,9 +19,12 @@ public function __construct()
      $this->middleware('auth',['except'=>'store']); 
    }
      */
-    public function index()
+    public function index($top_id)
     {
         //
+        $top=Top::find($top_id);  
+        $commentsData = [];
+        $top->comments->user;
     }
 
     /**
