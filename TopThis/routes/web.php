@@ -31,7 +31,7 @@ Route::get('/CreatePage', 'PageController@index1');
 Route::post('/CreatePage', ['uses'=> 'PageController@store','as'=>'page.store' ]);
 Route::post('/CreateTop', ['uses'=> 'TopController@store','as'=>'top.store' ]);
 Route::post('/CreateMainPage', ['uses'=> 'MainPageController@store','as'=>'mainpage.store' ]);
-Route::post('/comment/{top_id}' , ['uses'=> 'CommentController@store','as'=>'comment.store' ]);
+Route::post('/{top_id}/comment' , ['uses'=> 'CommentController@store','as'=>'comment.store' ]);
 
 //edit/delete comments 
 //Route::get('/comment/{id}/edit' , ['uses'=> 'CommentController@edit','as'=>'comment.edit' ]);

@@ -15,8 +15,7 @@ class CreateCommentTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('user');
-            $table->string('email');
+            $table->integer('user_id')->unsigned();
             $table->text('body');
             $table->integer('top_id')->unsigned();
             $table->integer('replay_id')->unsigned()->nullable();// id to the reply comment
@@ -28,6 +27,7 @@ class CreateCommentTable extends Migration
         Schema::table('comments', function (Blueprint $table)
                 {
           $table->foreign('top_id')->references('id')->on('tops')->onDelete('cascade');
+          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         }); 
     }
 
@@ -40,6 +40,7 @@ class CreateCommentTable extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
         $table->dropForeign(['top_id']);
+        $table->dropForeign(['user_id']);
     });
         Schema::dropIfExists('comments');
     }

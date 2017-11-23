@@ -48,10 +48,9 @@ class TopController extends Controller
         $top->page_id=$request->page_id;
         $top->title=$request->title;
         $top->body =$request->body;
-
         $page=Page::find($top->page_id);      
-        $top->page()->associate($page);
-              
+        $top->page()->associate($page);    
+        
         $top->save();       
         Session::flash('success','page done');
         return view('/CreateTop');

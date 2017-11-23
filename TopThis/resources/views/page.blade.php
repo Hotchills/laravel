@@ -29,22 +29,18 @@
         <div id="idi{{$top->id}}" class="ascunde">
             <h1>{{$top->title}}</h1>             
             <button onclick="show_comments({{$top->id}})">Click to add a new comment</button>
-
-            <div id="ds{{$top->id}}" class="newcommentarea" Style="display: none;">              
-                {{Form::open(['route'=>['comment.store',$top->id],'method'=>'POST'])}}                  
-                {{Form::text('user','user')}}                         
-                {{Form::text('email','Email')}} <br>                 
+            <div id="ds{{$top->id}}" class="newcommentarea" Style="display:none;">  
+                <p>{{Auth::user()->name}}</p>
+                {{ Form::open(['route'=>['comment.store',$top->id],'method'=>'POST'])}}                               
                 {{Form::textarea('body','Comment')}}<br>
                 {{Form::submit('Comment')}}    
                 {{ Form::close() }} 
             </div>     
-
             @foreach($top->comments as $comment)
             <br>
-            <div class="wrapper_com">
-               
+            <div class="wrapper_com">              
                 <div class="picture_com">picture</div>
-                <div class="header_com"><h4>{{$comment->user}}</h4></div>
+                <div class="header_com"><h4>{{$comment->user->name}}</h4></div>
                 <div class="content_com"><p>{!! nl2br(e($comment->body)) !!}</p></div>
                 <div class="footer_com">
                     <button onclick="open_comments({{$top->id}})"><a href="#tag">New comment</a></button>
