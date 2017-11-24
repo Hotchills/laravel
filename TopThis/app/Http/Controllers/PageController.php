@@ -7,6 +7,7 @@ use App\Page;
 use App\MainPage;
 use App\Comment;
 use Session;
+use App\Top;
 
 
 class PageController extends Controller
@@ -30,8 +31,8 @@ public function __construct()
         
        if ($page=Page::where('mainpage_id',$id)->where('name',$one)->first()){
            
-           $tops=Page::find($page->id)->tops;         
-         //   $tops=Top::where('pages_id',$page->id)->get();
+         //  $tops=Page::find($page->id)->tops;         
+            $tops=Top::where('page_id',$page->id)->orderBy('id')->Paginate(5);
         return view('page',compact('one','page','tops'));
        }
        abort(404);

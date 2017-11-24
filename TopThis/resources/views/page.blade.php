@@ -24,7 +24,6 @@
             <br>
             <p >{{$top->body}}</p>               
         </div> 
-
         <button  onclick="show({{$top->id}})">Show{{$top->id}}</button>
         <div id="idi{{$top->id}}" class="ascunde">
             <h1>{{$top->title}}</h1>             
@@ -62,6 +61,9 @@
         @endif
         <br>
     </div>
-
+    @include('pagination.pagination_stats', ['paginator' => $tops])
+    {{ $tops->links('pagination.pagination_links') }}
+ 
 </div>
+
 @endsection
