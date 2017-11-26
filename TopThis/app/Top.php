@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Comment;
 
 class Top extends Model {
 
@@ -17,4 +18,11 @@ class Top extends Model {
     public function comments() {
         return $this->hasMany('App\Comment','top_id','id');
     }
+      public function show(Top $top)
+    {
+        //
+       $comments=Comment::where('top_id',$top->id)->orderBy('id')->simplePaginate(5);
+       return $comments;
+    }
+    
 }

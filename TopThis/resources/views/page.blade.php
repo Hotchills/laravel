@@ -35,7 +35,7 @@
                 {{Form::submit('Comment')}}    
                 {{ Form::close() }} 
             </div>     
-            @foreach($top->comments as $comment)
+            @foreach($top->show($top) as $comment)
             <br>
             <div class="wrapper_com">              
                 <div class="picture_com">picture</div>
@@ -50,6 +50,8 @@
 
             </div>
             @endforeach 
+                  
+                 {{ $top->show($top)->links() }}
         </div>
         <br>
         @endforeach 

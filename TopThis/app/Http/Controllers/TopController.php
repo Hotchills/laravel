@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Session;
 use App\Page;
 
+
 class TopController extends Controller
 {
     /**
@@ -63,7 +64,7 @@ class TopController extends Controller
      * @param  \App\Top  $top
      * @return \Illuminate\Http\Response
      */
-    public function show(Top $top)
+    public function show()
     {
         //
     }
