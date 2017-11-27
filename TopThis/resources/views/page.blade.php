@@ -50,8 +50,8 @@
 
             </div>
             @endforeach 
-                  
-                 {{ $top->show($top)->links() }}
+                  @include('pagination.pagination_stats', ['paginator' => $top->show($top)])
+                 {{ $top->show($top)->appends(['top' => $tops->currentPage()])->links('pagination.pagination_links') }}
         </div>
         <br>
         @endforeach 
