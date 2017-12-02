@@ -107,5 +107,16 @@ class CommentController extends Controller {
     public function destroy(Comment $comment) {
         //
     }
+    public function increment(Request $request) {
 
+        $comment = Comment::find($request);
+        $comment->increment('up_vote');
+         
+        return  Redirect::to('/home');
+        //
+    }
+    public function showincrement () {
+        
+        //
+    }
 }

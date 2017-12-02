@@ -45,8 +45,8 @@
                     <button onclick="open_comments({{$top->id}})"><a href="#tag">New comment</a></button>
                     <button>Replay</button>  
                 </div>
-                <div class="up"> <p>21 <a href="">&#8657</a></p></div>
-                <div class="down"> <p>31 <a href="">&#8659</a></p></div>    
+                <button type="button" class="up" onlick="submit_but({{$comment->id}})">{{$comment->up_vote}} <span> &#8657</span> </button> 
+                <button type="button" class="down"> <p>{{$comment->down_vote }} &#8659</p></button>    
 
             </div>
             @endforeach 

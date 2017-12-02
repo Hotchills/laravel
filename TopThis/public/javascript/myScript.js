@@ -12,6 +12,27 @@ function myFunction123() {
     }
 }
 
+
+function submit_but(edit_id){
+
+    var url = "/comment1";
+    var params = edit_id;   
+    
+    var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function()
+        {
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+                alert(xmlHttp.responseText);
+            }
+        }    
+    xmlHttp.open("POST", url, true); 
+     xmlhttp.send(params);
+}
+
+
+
+
 function show_comments(id) {
     var x = document.getElementById('ds' + id);
     if (x.style.display === 'none') {
