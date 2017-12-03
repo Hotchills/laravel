@@ -13,22 +13,24 @@ function myFunction123() {
 }
 
 
-function submit_but(edit_id){
+  $('#up_vote').click(function() {
+      
+    var token = $(this).data('token');
+    var comment = "25";
+    $.ajax({
+      url: '/incrementvote',
+      type: 'post',
+      data: '_token=' + token + '&comment=' + comment,
+      dataType: 'json',
+      success:function(data) {
+        alert('Success !!!! ' + data);
+      },
+      error: function(data) {
+        console.log('BAHHHH ' + data);
+      }
+    });
+  });
 
-    var url = "/comment1";
-    var params = edit_id;   
-    
-    var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function()
-        {
-            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            {
-                alert(xmlHttp.responseText);
-            }
-        }    
-    xmlHttp.open("POST", url, true); 
-     xmlhttp.send(params);
-}
 
 
 
@@ -41,6 +43,15 @@ function show_comments(id) {
         x.style.display = 'none';
     }
 }
+function show_commentreplay(id) {
+    var x = document.getElementById('replay' + id);
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
 function open_comments(id) {
     var x = document.getElementById('ds' + id);
     if (x.style.display === 'none') {

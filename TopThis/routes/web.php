@@ -32,7 +32,8 @@ Route::post('/CreatePage', ['uses'=> 'PageController@store','as'=>'page.store' ]
 Route::post('/CreateTop', ['uses'=> 'TopController@store','as'=>'top.store' ]);
 Route::post('/CreateMainPage', ['uses'=> 'MainPageController@store','as'=>'mainpage.store' ]);
 Route::post('/{top_id}/comment' , ['uses'=> 'CommentController@store','as'=>'comment.store' ]);
-Route::post('/comment1' , 'CommentController@increment');
+Route::post('/{top_id}/{parent_id}/comment' , ['uses'=> 'CommentController@storereplay','as'=>'comment.storereplay' ]);
+
 //Route::get('/comment1' , 'CommentController@showincrement' );
 
 //edit/delete comments 

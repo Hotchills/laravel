@@ -21,7 +21,7 @@ class Top extends Model {
       public function show(Top $top)
     {
         //
-       $comments=Comment::where('top_id',$top->id)->orderBy('id')->Paginate(5, ['*'],"'comment',$top->id");
+       $comments=Comment::where('top_id',$top->id)->whereNull('replay_id')->orderBy('id')->Paginate(5, ['*'],"'comment',$top->id");
        return $comments;
     }
     

@@ -52,8 +52,7 @@ class CommentController extends Controller {
         }
 
         $comment = new Comment();
-        //   $comment->top_id=$top_id;
-        $comment->replay_id = $request->replay_id;
+        $comment->replay_id = NULL;
         $comment->user_id = $u_id;
         $comment->body = $request->body;
         $comment->top()->associate($top);
@@ -62,10 +61,29 @@ class CommentController extends Controller {
         $comment->user()->associate($user);
 
         $comment->save();
-        //  Session::flash('success','page done');
         return redirect()->back()->with('message', 'Comment added');
     }
 
+    public function storereplay(Request $request, $top_id, $parent_id) {
+        
+        $top = Top::find($top_id);
+        if (Auth::check()) {
+            $u_id = Auth::id();
+        } else {
+            return redirect()->back()->with('message', 'You need to login');
+        }
+        $comment = new Comment();
+        $comment->replay_id = $parent_id;
+        $comment->user_id = $u_id;
+        $comment->body = $request->body;
+        $comment->top()->associate($top);
+
+        $user = User::find($comment->user_id);
+        $comment->user()->associate($user);
+
+        $comment->save();
+        return redirect()->back()->with('message', 'Comment added');
+    }
 
     /**
      * Display the specified resource.
@@ -107,16 +125,11 @@ class CommentController extends Controller {
     public function destroy(Comment $comment) {
         //
     }
-    public function increment(Request $request) {
-
-        $comment = Comment::find($request);
-        $comment->increment('up_vote');
-         
-        return  Redirect::to('/home');
-        //
-    }
-    public function showincrement () {
+    public function incrementvote(Request $comment){
         
-        //
+        $temp=Comment::find($comment);
+        $temp->up_vote=1;
+        
+        return response()->json(['status' => 'success'], 201);
     }
 }

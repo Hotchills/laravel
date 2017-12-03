@@ -13,10 +13,10 @@
         <div class="panel-heading" >
             <input type=checkbox id="show">
             <label for="show"><p Style="font-size: 25px;">Page name :{!! $one !!} </p></label>  
-            <span id="content_com"><p>  Main page : {!! $page->mainpage->name !!}&nbsp |&nbsp  Title : {{$page->title}}&nbsp| &nbsp   Body : {{$page->body}}</p></span>  
+            <span id="content_com" ><p>  Main page : {!! $page->mainpage->name !!}&nbsp |&nbsp  Title : {{$page->title}}&nbsp| &nbsp   Body : {{$page->body}}</p></span>  
         </div>
         <br>
-        <div Style="margin-left:20px;"><h2>Tops on this category:</h2></div>
+        <div  Style="margin-left:20px;"><h2>Tops on this category:</h2></div>
         <br>
         @foreach($tops as $top)    
         <div id="top_nr{{$top->id}}" class="top-heading" onclick="show({{$top->id}})">                    
@@ -43,15 +43,44 @@
                 <div class="content_com"><p>{!! nl2br(e($comment->body)) !!}</p></div>
                 <div class="footer_com">
                     <button onclick="open_comments({{$top->id}})"><a href="#tag">New comment</a></button>
-                    <button>Replay</button>  
+                    @if(Auth::user()->name != $comment->user->name)
+                    <button onclick="show_commentreplay({{$comment->id}})">Replay</button>     
+                    @endif
                 </div>
-                <button type="button" class="up" onlick="submit_but({{$comment->id}})">{{$comment->up_vote}} <span> &#8657</span> </button> 
-                <button type="button" class="down"> <p>{{$comment->down_vote }} &#8659</p></button>    
-
+                <button id="up_vote" data-token="{{ csrf_token() }}" type="button" class="up" >{{$comment->up_vote}} button  &#8657 </button> 
+                <button type="button" class="down"> <p>{{$comment->down_vote }} &#8659</p></button>                   
             </div>
+            @foreach($comment->showreplays($comment) as $replaycomment)
+
+            <div class="wrapper_com" Style="margin-left:60px; width:90%;">              
+                <div class="picture_com">picture</div>
+                <div class="header_com"><h4>{{$replaycomment->user->name}}</h4></div>
+                <div class="content_com"><p>{!! nl2br(e($replaycomment->body)) !!}</p></div>
+                <div class="footer_com">
+                    <button onclick="open_comments({{$top->id}})"><a href="#tag">New comment</a></button>
+                    @if(Auth::user()->name != $comment->user->name)
+                    <button onclick="show_commentreplay({{$comment->id}})">Replay</button>  
+                    @endif
+                </div>
+                <button type="button" class="up" >{{$replaycomment->up_vote}} <span> &#8657</span> </button> 
+                <button type="button" class="down"> <p>{{$replaycomment->down_vote }} &#8659</p></button>                   
+            </div>
+
+
             @endforeach 
-                  @include('pagination.pagination_stats', ['paginator' => $top->show($top)])
-                 {{ $top->show($top)->appends(['top' => $tops->currentPage()])->links('pagination.pagination_links') }}
+            @if(Auth::user()->name != $comment->user->name)
+            <div id="replay{{$comment->id}}" class="newcommentarea" Style="display:none;margin-left:50px;width:90%;">  
+                <p>{{Auth::user()->name}} replay to -> {{$comment->user->name}}</p>
+                {{ Form::open(['route'=>['comment.storereplay',$top->id,$comment->id],'method'=>'POST'])}}                               
+                {{ Form::textarea('body','Comment')}}<br>
+                {{ Form::submit('Comment')}}    
+                {{ Form::close() }} 
+            </div>   
+            @endif
+
+            @endforeach 
+            @include('pagination.pagination_stats', ['paginator' => $top->show($top)])
+            {{ $top->show($top)->appends(['top' => $tops->currentPage()])->links('pagination.pagination_links') }}
         </div>
         <br>
         @endforeach 
@@ -65,7 +94,7 @@
     </div>
     @include('pagination.pagination_stats', ['paginator' => $tops])
     {{ $tops->links('pagination.pagination_links') }}
- 
+
 </div>
 
 @endsection

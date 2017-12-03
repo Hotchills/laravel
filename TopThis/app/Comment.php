@@ -16,4 +16,11 @@ class Comment extends Model
     public function user() {
     return $this->belongsTo('App\User','user_id','id');
     }
+    
+   public function showreplays(Comment $comment){
+       
+       $children=Comment::where('replay_id',$comment->id)->orderBy('id')->get();
+      
+       return $children;
+   }
 }
