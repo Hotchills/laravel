@@ -33,6 +33,9 @@ Route::post('/CreateTop', ['uses'=> 'TopController@store','as'=>'top.store' ]);
 Route::post('/CreateMainPage', ['uses'=> 'MainPageController@store','as'=>'mainpage.store' ]);
 Route::post('/{top_id}/comment' , ['uses'=> 'CommentController@store','as'=>'comment.store' ]);
 Route::post('/{top_id}/{parent_id}/comment' , ['uses'=> 'CommentController@storereplay','as'=>'comment.storereplay' ]);
+Route::post('/incrementvote' , 'CommentController@incrementvote');
+Route::post('/decrementvote' , 'CommentController@decrementvote');
+Route::post('/deletecomment' , 'CommentController@deletecomment');
 
 //Route::get('/comment1' , 'CommentController@showincrement' );
 

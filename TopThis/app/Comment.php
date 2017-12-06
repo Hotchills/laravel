@@ -19,7 +19,7 @@ class Comment extends Model
     
    public function showreplays(Comment $comment){
        
-       $children=Comment::where('replay_id',$comment->id)->orderBy('id')->get();
+       $children=Comment::where('replay_id',$comment->id)->whereNull('approuved')->orderBy('id')->get();
       
        return $children;
    }
