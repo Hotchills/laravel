@@ -13,7 +13,9 @@ function myFunction123() {
 }
 
 
-function upvotecomment(temp) {
+function upvotecomment(temp, vote) {
+
+    document.getElementById('up_vote_comment' + temp).innerHTML = vote + 1;
 
     var commentid = temp;
 
@@ -29,7 +31,9 @@ function upvotecomment(temp) {
                 console.log(msg['message']);
             });
 }
-function downvotecomment(temp) {
+function downvotecomment(temp, vote) {
+
+    document.getElementById('down_vote_comment' + temp).innerHTML = vote + 1;
 
     var commentid = temp;
 
@@ -62,8 +66,18 @@ function deletecomment(temp) {
                 console.log(msg['message']);
             });
 }
-
-
+function show_comment_children(id)
+{
+    var x = document.getElementById('show_comment_children' + id);
+    var y = document.getElementById('show_comment_children_button' + id);
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+        y.innerHTML = 'Hide replies &#10548;';
+    } else {
+        x.style.display = 'none';
+        y.innerHTML = 'View all replies &#10549;';
+    }
+}
 
 function show_comments(id) {
     var x = document.getElementById('ds' + id);
@@ -158,22 +172,22 @@ function showSlides1() {
 
 }
 
-function modalfunction(){
+function modalfunction() {
 // Get the modal
-var modal = document.getElementById('myModal');
+    var modal = document.getElementById('myModal');
 // When the user clicks the button, open the modal 
-  modal.style.display = "block";
+    modal.style.display = "block";
 }
 // When the user clicks on button class close (x), close the modal
-function modalfunctionclose(){
-var modal = document.getElementById('myModal');
-   modal.style.display = "none";
+function modalfunctionclose() {
+    var modal = document.getElementById('myModal');
+    modal.style.display = "none";
 }
 
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-var modal = document.getElementById('myModal');
+window.onclick = function (event) {
+    var modal = document.getElementById('myModal');
     if (event.target === modal) {
         modal.style.display = "none";
     }

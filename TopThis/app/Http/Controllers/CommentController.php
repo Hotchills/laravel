@@ -127,7 +127,7 @@ class CommentController extends Controller {
          $comment=Comment::where('id',$temp)->first();
         
      //   $comment=Comment::where($temp,'id')->get();
-        $comment->approuved=2;
+        $comment->approuved=2; // do not whow comment
         $comment->save();
          
         return response()->json(['message' => $comment->id]);      

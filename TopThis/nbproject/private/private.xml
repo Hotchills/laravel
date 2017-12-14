@@ -7,10 +7,12 @@
             <file>file:/C:/rep/laravel/TopThis/resources/views/page.blade.php</file>
             <file>file:/C:/rep/laravel/TopThis/app/Top.php</file>
             <file>file:/C:/rep/laravel/TopThis/app/Http/Controllers/CommentController.php</file>
+            <file>file:/C:/rep/laravel/TopThis/public/css/menu.css</file>
             <file>file:/C:/rep/laravel/TopThis/routes/web.php</file>
             <file>file:/C:/rep/laravel/TopThis/app/Comment.php</file>
             <file>file:/C:/rep/laravel/TopThis/public/javascript/myScript.js</file>
             <file>file:/C:/rep/laravel/TopThis/resources/views/layouts/layout_main.blade.php</file>
+            <file>file:/C:/rep/laravel/TopThis/app/Page.php</file>
         </group>
     </open-files>
 </project-private>
