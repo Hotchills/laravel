@@ -58,6 +58,7 @@ body{
     background: #FDFDFD;
 }
 .firstmain{
+    position:relative;
     grid-area:firstmain;  
     overflow: hidden;
     margin-bottom:30px;
@@ -921,12 +922,12 @@ border-radius:10px;
 #show:checked~#content{display:block;}
 
 .ascunde {    
-    border-radius:5px;
+    border-radius: 5px;
     border:1px solid grey;
     cursor: default;
     background: #C0C0C0	;
-    display:none;
-    position:absolute;
+    display: none;
+    position: absolute;
     right:0px;
     top:100px;
     height:auto;
@@ -942,11 +943,11 @@ border-radius:10px;
     background: black;
 }
 .top-heading{
+    position:relative;
     border-radius:5px;
     padding:20px;
     margin-right:20px;
     padding-left:40px;
-    align:left;
     background: white;
     width: 45%;
     height:auto;
@@ -1016,4 +1017,9 @@ border-radius:10px;
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+.clear
+{
+  clear:both;
 }

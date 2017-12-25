@@ -55,7 +55,7 @@ class CommentController extends Controller {
         $comment->user_id = $u_id;
         $comment->body = $request->body;
         $comment->top()->associate($top);
-        $comment->approuved=1;//1 - needs to be approuved by admin/moderator
+        $comment->approuved=NULL;//1 - needs to be approuved by admin/moderator
         $user = User::find($comment->user_id);
         $comment->user()->associate($user);
         $comment->save();
