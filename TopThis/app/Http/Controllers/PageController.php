@@ -32,7 +32,7 @@ public function __construct()
        if ($page=Page::where('mainpage_id',$id)->where('name',$one)->first()){
            
          //  $tops=Page::find($page->id)->tops;         
-            $tops=Top::where('page_id',$page->id)->orderBy('id')->Paginate(5,['*'],'top');
+            $tops=Top::where('page_id',$page->id)->orderBy('id')->Paginate(10,['*'],'top');
         return view('page',compact('one','page','tops'));
        }
        abort(404);
