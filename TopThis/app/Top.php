@@ -19,9 +19,9 @@ class Top extends Model {
         return $this->hasMany('App\Comment','top_id','id');
     }
       public function show(Top $top)
-    {
-        //
+    {        //
        $comments=Comment::where('top_id',$top->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('id')->Paginate(5, ['*'],"'comment',$top->id");
+                   
        return $comments;
     }
     

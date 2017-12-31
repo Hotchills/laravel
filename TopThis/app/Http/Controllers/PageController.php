@@ -9,43 +9,40 @@ use App\Comment;
 use Session;
 use App\Top;
 
+class PageController extends Controller {
 
-class PageController extends Controller
-
-{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-public function __construct()
-     {
-     $this->middleware('auth',['except'=>'index']); 
-   }
-    
-    public function index($main,$slug)
-    {
-        //
-        $one=$slug;
-        $id=MainPage::where('name',$main)->first()->id;
-        
-       if ($page=Page::where('mainpage_id',$id)->where('name',$one)->first()){
-           
-         //  $tops=Page::find($page->id)->tops;         
-            $tops=Top::where('page_id',$page->id)->orderBy('id')->Paginate(10,['*'],'top');
-        return view('page',compact('one','page','tops'));
-       }
-       abort(404);
+    public function __construct() {
+        $this->middleware('auth', ['except' => 'index']);
     }
-    public function index1()
-    {
 
-         return view('CreatePage');
+    public function index($main, $slug, Request $request) {
+        //
+        $one = $slug;
+        $id = MainPage::where('name', $main)->first()->id;
+
+        if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
+            //  $tops=Page::find($page->id)->tops;         
+            $tops = Top::where('page_id', $page->id)->orderBy('id')->Paginate(7, ['*'], 'top');
+            if ($request->ajax()) {
+                return view('page', ['one' => $one, 'page' => $page, 'tops' => $tops])->render();
+            }
+            return view('page', compact('one', 'page', 'tops'));
+        }
+        abort(404);
     }
-  
-    public function create()
-    {     
-       
+
+    public function index1() {
+
+        return view('CreatePage');
+    }
+
+    public function create() {
+        
     }
 
     /**
@@ -54,28 +51,27 @@ public function __construct()
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        
-       
-        
+    public function store(Request $request) {
+
+
+
         $page = new Page();
-        $page->name=$request->name;
-        $page->title=$request->title;
-        $page->body =$request->body;
-        $page->mainpage_id=$request->mainpage_id;
-        $mainpage= MainPage::find($page->mainpage_id);      
+        $page->name = $request->name;
+        $page->title = $request->title;
+        $page->body = $request->body;
+        $page->mainpage_id = $request->mainpage_id;
+        $mainpage = MainPage::find($page->mainpage_id);
         $page->mainpage()->associate($mainpage);
-        
+
         $page->save();
-        
-     //   $tops=Top::where('page_name',$one)->get();
-        
-        Session::flash('success','page done');
-        
-       return view('/CreatePage');
-     //   return Redirect::back()->withInput();
-     //   return view('page',compact('one','page','tops'));
+
+        //   $tops=Top::where('page_name',$one)->get();
+
+        Session::flash('success', 'page done');
+
+        return view('/CreatePage');
+        //   return Redirect::back()->withInput();
+        //   return view('page',compact('one','page','tops'));
     }
 
     /**
@@ -84,10 +80,8 @@ public function __construct()
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
-        
     }
 
     /**
@@ -96,8 +90,7 @@ public function __construct()
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -108,8 +101,7 @@ public function __construct()
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -119,8 +111,8 @@ public function __construct()
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
+
 }

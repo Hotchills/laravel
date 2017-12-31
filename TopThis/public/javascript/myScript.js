@@ -4,37 +4,54 @@ window.onscroll = function () {
     myFunction123();
 };
 /* var num = document.getElementById('myId').clientHeight; */
-var num = 120;
-function myFunction123() {
-    if (document.body.scrollTop > num || document.documentElement.scrollTop > num) {
-        document.getElementById("myId").className = "fixed";
-    } else {
-        document.getElementById("myId").className = "nav";
-    }
-}
 
 
 $(function () {
-    $('body').on('click', '.pagination a', function (e) {
-        e.preventDefault();
-        $('#load a').css('color', '#dfecf6');
- //       $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
-
-        var url = $(this).attr('href');
+    $(window).on('hashchange', function () {
+        url = window.location.hash.replace('#', '');
         getArticles(url);
-        window.history.pushState("", "", url);
     });
 
-    function getArticles(url) {
-        $.ajax({
-            url: url
-        }).done(function (data) {
-            $('.top').html(data);
-        }).fail(function () {
-            alert('Articles could not be loaded.');
+    if ($('body').is('.BodyOfPage')) {
+        $(document).on('click', '.pagination a', function (e) {
+            e.preventDefault();
+
+            var url = $(this).attr('href').split('?top=')[1];
+            //  getArticles(url);
+            //      window.history.pushState("", "", "", url);
+            //  console.log($(this).attr('href'));
+            console.log('top');
+            location.hash = url;
         });
+
+        $(document).on('click', '.pagination2 a', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href').split('?top=')[1];
+            //  getArticles(url);
+          //  window.history.pushState("", "", "", url);
+            //  console.log($(this).attr('href'));
+            console.log('comments');
+             location.hash = url;
+        });
+
+        function getArticles(url) {
+            $.ajax({
+                url: 'http://127.0.0.1:8000/1/1?top=' + url
+            }).done(function (data) {
+                console.log(url);
+                $('.showtops').html(data);
+            }).fail(function () {
+                alert('tops could not be loaded.');
+            });
+        }
+
+
+
     }
+
 });
+
+
 
 function upvotecomment(temp, vote) {
 
@@ -89,6 +106,17 @@ function deletecomment(temp) {
                 console.log(msg['message']);
             });
 }
+
+var num = 120;
+function myFunction123() {
+    if (document.body.scrollTop > num || document.documentElement.scrollTop > num) {
+        document.getElementById("myId").className = "fixed";
+    } else {
+        document.getElementById("myId").className = "nav";
+    }
+}
+
+
 function show_comment_children(id)
 {
     var x = document.getElementById('show_comment_children' + id);
@@ -139,61 +167,8 @@ function show(id) {
         Divs[j].style.backgroundColor = "white";
     }
     document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
-
-
 }
 
-var slideIndex = 1;
-showSlides(slideIndex);
-
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
-
-function currentSlide(n) {
-    showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-    var i;
-    var slides = document.getElementsByClassName("mySlides");
-    var dots = document.getElementsByClassName("dot");
-    if (n > slides.length) {
-        slideIndex = 1;
-    }
-    if (n < 1) {
-        slideIndex = slides.length;
-    }
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " active";
-}
-
-showSlides1();
-function showSlides1() {
-    var i;
-    var slides = document.getElementsByClassName("mySlides");
-    var dots = document.getElementsByClassName("dot");
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) {
-        slideIndex = 1;
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " active";
-    setTimeout(showSlides1, 10000); // Change image every 2 seconds
-
-}
 
 function modalfunction() {
 // Get the modal

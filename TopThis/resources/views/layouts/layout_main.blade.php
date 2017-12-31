@@ -28,11 +28,7 @@
         @include('layouts.header')    
         @include('layouts.menu')   
 
-
-
         @yield('content')
-
-
 
         <div class="footer">
             @include('layouts.footer')  
