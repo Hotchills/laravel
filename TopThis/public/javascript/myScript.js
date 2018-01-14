@@ -1,54 +1,97 @@
+var idglobal=1;
 
+function show(id) {
+    var allDivs = document.getElementsByClassName('ascunde');
+    var Divs = document.getElementsByClassName('top-heading');
+    for (var i = 0; i < allDivs.length; i++) {
+        allDivs[i].classList.remove('afiseaza');
+    }
+    document.getElementById('idi' + id).classList.add('afiseaza');
+
+    for (var j = 0; j < Divs.length; j++) {
+        Divs[j].style.backgroundColor = "white";
+    }
+    document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
+    idglobal=id;
+  //   console.log(idglobal);
+}
+function show1() {
+    id=idglobal;
+    var allDivs = document.getElementsByClassName('ascunde');
+    var Divs = document.getElementsByClassName('top-heading');
+    for (var i = 0; i < allDivs.length; i++) {
+        allDivs[i].classList.remove('afiseaza');
+    }
+    document.getElementById('idi' + id).classList.add('afiseaza');
+
+    for (var j = 0; j < Divs.length; j++) {
+        Divs[j].style.backgroundColor = "white";
+    }
+    document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
+    idglobal=id;
+  //   console.log(idglobal);
+}
+
+//window.setInterval(show1, 60);
 
 window.onscroll = function () {
     myFunction123();
 };
 /* var num = document.getElementById('myId').clientHeight; */
-
-
+// mutiple requests on ajax : https://stackoverflow.com/questions/42873712/render-multiple-blade-view-sections-on-ajax-request
 $(function () {
-    $(window).on('hashchange', function () {
-        url = window.location.hash.replace('#', '');
-        getArticles(url);
-    });
+    //  $(window).on('hashchange', function () {
+    //      url = window.location.hash.replace('#', '');
 
+    //  });
     if ($('body').is('.BodyOfPage')) {
-        $(document).on('click', '.pagination a', function (e) {
-            e.preventDefault();
-
-            var url = $(this).attr('href').split('?top=')[1];
-            //  getArticles(url);
-            //      window.history.pushState("", "", "", url);
-            //  console.log($(this).attr('href'));
-            console.log('top');
-            location.hash = url;
-        });
-
         $(document).on('click', '.pagination2 a', function (e) {
             e.preventDefault();
-            var url = $(this).attr('href').split('?top=')[1];
-            //  getArticles(url);
-          //  window.history.pushState("", "", "", url);
+ 
+            var str = $(this).attr('href').split('comment%')[1];
+            idglobal = str.charAt(2);
             //  console.log($(this).attr('href'));
-            console.log('comments');
-             location.hash = url;
+            //   
+            //   location.hash = url;
+            var url = $(this).attr('href');
+            console.log(idglobal);
+            getArticles(url);
+            window.history.pushState("", "", url);
+            document.getElementById('idi' + idglobal).classList.add('afiseaza');
+            setTimeout(show1,400);
+            setTimeout(show1,400);
+            setTimeout(show1,400);
+            setTimeout(show1,400);
+        });
+
+        $(document).on('click', '.pagination a', function (e) {
+            e.preventDefault();
+            //      var url = $(this).attr('href').split('?top=')[1];
+            var url = $(this).attr('href');
+            //  console.log($(this).attr('href'));
+            //     console.log(url2);
+            //     console.log(str);
+            //    console.log(str2);
+            //     location.hash = str;
+            getArticles(url);
+            window.history.pushState("", "", url);
+
         });
 
         function getArticles(url) {
             $.ajax({
-                url: 'http://127.0.0.1:8000/1/1?top=' + url
+                url: url,
+                type: "get",
+                datatype: "html"           
             }).done(function (data) {
-                console.log(url);
-                $('.showtops').html(data);
-            }).fail(function () {
+                //    console.log(url);
+                $('.ShowTopsClass').html(data);
+
+            }).fail(function (jqXHR, ajaxOptions, thrownError) {
                 alert('tops could not be loaded.');
             });
         }
-
-
-
     }
-
 });
 
 
@@ -153,22 +196,6 @@ function open_comments(id) {
         x.style.display = 'block';
     }
 }
-
-function show(id) {
-
-    var allDivs = document.getElementsByClassName('ascunde');
-    var Divs = document.getElementsByClassName('top-heading');
-    for (var i = 0; i < allDivs.length; i++) {
-        allDivs[i].classList.remove('afiseaza');
-    }
-    document.getElementById('idi' + id).classList.add('afiseaza');
-
-    for (var j = 0; j < Divs.length; j++) {
-        Divs[j].style.backgroundColor = "white";
-    }
-    document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
-}
-
 
 function modalfunction() {
 // Get the modal

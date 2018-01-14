@@ -8,6 +8,7 @@ use App\MainPage;
 use App\Comment;
 use Session;
 use App\Top;
+use Illuminate\Support\Facades\URL;
 
 class PageController extends Controller {
 
@@ -23,13 +24,18 @@ class PageController extends Controller {
     public function index($main, $slug, Request $request) {
         //
         $one = $slug;
+        $returntyp = $request->returntype;
         $id = MainPage::where('name', $main)->first()->id;
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
-            //  $tops=Page::find($page->id)->tops;         
+            //  $tops=Page::find($page->id)->tops;  
+            //        dd($urleul=$request->url());
             $tops = Top::where('page_id', $page->id)->orderBy('id')->Paginate(7, ['*'], 'top');
+            //  $comments = show();
+
             if ($request->ajax()) {
-                return view('page', ['one' => $one, 'page' => $page, 'tops' => $tops])->render();
+ 
+                    return view('TopsPage', ['tops' => $tops])->render();
             }
             return view('page', compact('one', 'page', 'tops'));
         }
