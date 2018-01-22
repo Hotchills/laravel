@@ -24,23 +24,27 @@ class PageController extends Controller {
     public function index($main, $slug, Request $request) {
         //
         $one = $slug;
-        $returntyp = $request->returntype;
+        $returntyp = $request->returntyp;
         $id = MainPage::where('name', $main)->first()->id;
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
             //  $tops=Page::find($page->id)->tops;  
             //        dd($urleul=$request->url());
-            $tops = Top::where('page_id', $page->id)->orderBy('id')->Paginate(7, ['*'], 'top');
-            //  $comments = show();
-
+            $tops = Top::where('page_id', $page->id)->orderBy('id')->take(10)->get();
+            $top = Top::where('id', $returntyp)->first();
+            
+              
             if ($request->ajax()) {
  
-                    return view('TopsPage', ['tops' => $tops])->render();
+                    return view('CommentsPage', ['top' => $top])->render();
             }
             return view('page', compact('one', 'page', 'tops'));
         }
         abort(404);
     }
+    
+    
+    
 
     public function index1() {
 

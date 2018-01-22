@@ -14,25 +14,30 @@ function show(id) {
     document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
     idglobal=id;
   //   console.log(idglobal);
-}
-function show1() {
-    id=idglobal;
-    var allDivs = document.getElementsByClassName('ascunde');
-    var Divs = document.getElementsByClassName('top-heading');
-    for (var i = 0; i < allDivs.length; i++) {
-        allDivs[i].classList.remove('afiseaza');
-    }
-    document.getElementById('idi' + id).classList.add('afiseaza');
+  
+              var url = $(this).attr('href');
+            getArticles(url);
+            
+                    function getArticles(url) {
+            $.ajax({
+                url: url,
+                type: "get",
+                datatype: "html",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {returntyp: idglobal}
+    })
+            .done(function (data) {
+                    console.log(idglobal);
+                $('.ShowCommentsClass').html(data);
 
-    for (var j = 0; j < Divs.length; j++) {
-        Divs[j].style.backgroundColor = "white";
-    }
-    document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
-    idglobal=id;
-  //   console.log(idglobal);
+            }).fail(function (jqXHR, ajaxOptions, thrownError) {
+                alert('tops could not be loaded.');
+            });
+        }  
 }
 
-//window.setInterval(show1, 60);
 
 window.onscroll = function () {
     myFunction123();
@@ -45,47 +50,28 @@ $(function () {
 
     //  });
     if ($('body').is('.BodyOfPage')) {
-        $(document).on('click', '.pagination2 a', function (e) {
-            e.preventDefault();
- 
-            var str = $(this).attr('href').split('comment%')[1];
-            idglobal = str.charAt(2);
-            //  console.log($(this).attr('href'));
-            //   
-            //   location.hash = url;
-            var url = $(this).attr('href');
-            console.log(idglobal);
-            getArticles(url);
-            window.history.pushState("", "", url);
-            document.getElementById('idi' + idglobal).classList.add('afiseaza');
-            setTimeout(show1,400);
-            setTimeout(show1,400);
-            setTimeout(show1,400);
-            setTimeout(show1,400);
-        });
-
         $(document).on('click', '.pagination a', function (e) {
             e.preventDefault();
             //      var url = $(this).attr('href').split('?top=')[1];
             var url = $(this).attr('href');
             //  console.log($(this).attr('href'));
-            //     console.log(url2);
-            //     console.log(str);
-            //    console.log(str2);
-            //     location.hash = str;
             getArticles(url);
             window.history.pushState("", "", url);
-
         });
 
         function getArticles(url) {
             $.ajax({
                 url: url,
                 type: "get",
-                datatype: "html"           
-            }).done(function (data) {
-                //    console.log(url);
-                $('.ShowTopsClass').html(data);
+                datatype: "html",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {returntyp: idglobal}
+    })
+            .done(function (data) {
+                    console.log(idglobal);
+                $('.ShowCommentsClass').html(data);
 
             }).fail(function (jqXHR, ajaxOptions, thrownError) {
                 alert('tops could not be loaded.');

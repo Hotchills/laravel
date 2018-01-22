@@ -1,5 +1,6 @@
-
-@foreach($top->show($top) as $comment)
+ {{ $top->show()->links() }}
+ 
+@foreach($top->show() as $comment)
 <br>
 <div class="wrapper_com">              
     <div class="picture_com">picture</div>
@@ -26,6 +27,7 @@
 </div>
 <button id="show_comment_children_button{{$comment->id}}" onclick="show_comment_children({{$comment->id}})">View all replies &#10549;</button>
 <div id="show_comment_children{{$comment->id}}" Style="display:none;">
+
     @foreach($comment->showreplays($comment) as $replaycomment)
 
     <div class="wrapper_com" Style="margin-left:60px; width:90%;">              
@@ -65,6 +67,11 @@
 <div class="clear"></div>
 @endforeach 
 
-@include('pagination.pagination_stats', ['paginator' => $top->show($top)])
-{{ $top->show($top)->appends(['top' => $tops->currentPage()])->links('pagination.pagination_links2') }}
 
+
+
+{{--  paginate comments + tops
+    @include('pagination.pagination_stats', ['paginator' => $top->show($top)]) 
+{{ $top->show($top)->appends(['top' => $tops->currentPage])->links('pagination.pagination_links2') }} 
+
+--}}

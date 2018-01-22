@@ -22,9 +22,14 @@
             {{ Form::close() }} 
         </div>  
         @endguest  
+       
+       
+      
         
         <section class="ShowCommentsClass">
+              
             @include('CommentsPage')
+           
         </section>
 
     </div>
@@ -32,5 +37,8 @@
     @endforeach 
 </div>
 
+
+{{-- paginate comments + tops
 @include('pagination.pagination_stats', ['paginator' => $tops])
-{{ $tops->links('pagination.pagination_links') }}
+{{ $tops->links('pagination.pagination_links') }} 
+--}}
