@@ -28,23 +28,17 @@ class PageController extends Controller {
         $id = MainPage::where('name', $main)->first()->id;
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
-            //  $tops=Page::find($page->id)->tops;  
-            //        dd($urleul=$request->url());
+
             $tops = Top::where('page_id', $page->id)->orderBy('id')->take(10)->get();
-            $top = Top::where('id', $returntyp)->first();
-            
-              
+
             if ($request->ajax()) {
- 
-                    return view('CommentsPage', ['top' => $top])->render();
+                $top = Top::where('id', $returntyp)->first();
+                return view('CommentsPage', ['top' => $top])->render();
             }
             return view('page', compact('one', 'page', 'tops'));
         }
         abort(404);
     }
-    
-    
-    
 
     public function index1() {
 

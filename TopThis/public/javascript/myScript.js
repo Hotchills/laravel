@@ -1,5 +1,6 @@
-var idglobal=1;
-
+var idglobal = 1;
+var globalvar = 0;
+var tempglobal=0;
 function show(id) {
     var allDivs = document.getElementsByClassName('ascunde');
     var Divs = document.getElementsByClassName('top-heading');
@@ -12,30 +13,33 @@ function show(id) {
         Divs[j].style.backgroundColor = "white";
     }
     document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
-    idglobal=id;
-  //   console.log(idglobal);
-  
-              var url = $(this).attr('href');
-            getArticles(url);
-            
-                    function getArticles(url) {
+    idglobal = id;
+    console.log('globalvar = ');
+    console.log(globalvar);
+    if (globalvar == 1) {
+        var url = $(this).attr('href');
+
+        getArticles(url);
+        window.history.pushState("", "", url);
+        function getArticles(url) {
             $.ajax({
                 url: url,
                 type: "get",
                 datatype: "html",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {returntyp: idglobal}
-    })
-            .done(function (data) {
-                    console.log(idglobal);
-                $('.ShowCommentsClass').html(data);
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {returntyp: idglobal}
+            })
+                    .done(function (data) {
+                        console.log(idglobal);
+                        $('.ShowCommentsClass').html(data);
 
-            }).fail(function (jqXHR, ajaxOptions, thrownError) {
+                    }).fail(function (jqXHR, ajaxOptions, thrownError) {
                 alert('tops could not be loaded.');
             });
-        }  
+        }
+    }
 }
 
 
@@ -52,6 +56,7 @@ $(function () {
     if ($('body').is('.BodyOfPage')) {
         $(document).on('click', '.pagination a', function (e) {
             e.preventDefault();
+            globalvar = 1;
             //      var url = $(this).attr('href').split('?top=')[1];
             var url = $(this).attr('href');
             //  console.log($(this).attr('href'));
@@ -64,16 +69,16 @@ $(function () {
                 url: url,
                 type: "get",
                 datatype: "html",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {returntyp: idglobal}
-    })
-            .done(function (data) {
-                    console.log(idglobal);
-                $('.ShowCommentsClass').html(data);
-
-            }).fail(function (jqXHR, ajaxOptions, thrownError) {
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {returntyp: idglobal}
+            })
+                    .done(function (data) {
+                        console.log(idglobal);
+                        $('.ShowCommentsClass').html(data);
+show_comments_class(tempglobal, idglobal) ;
+                    }).fail(function (jqXHR, ajaxOptions, thrownError) {
                 alert('tops could not be loaded.');
             });
         }
@@ -182,6 +187,29 @@ function open_comments(id) {
         x.style.display = 'block';
     }
 }
+function show_comments_class(type, id) {
+    console.log(id);
+    var temp = type;
+    var x = document.getElementById('ShowDefaultComments' + id);
+    var y = document.getElementById('ShowUpVoteComments' + id);
+    console.log(x);
+    console.log(y);
+    if (temp == 1) {
+        x.style.display = 'none';
+        y.style.display = 'block';
+
+
+    } else if (temp == 2) {
+        y.style.display = 'none';
+        x.style.display = 'block';
+
+    }
+    
+    tempglobal=temp;
+
+}
+
+
 
 function modalfunction() {
 // Get the modal

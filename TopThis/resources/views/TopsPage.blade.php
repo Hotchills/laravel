@@ -22,14 +22,16 @@
             {{ Form::close() }} 
         </div>  
         @endguest  
-       
-       
-      
-        
+
+
+        <?php $comments = $top->show(); ?>
+
+
+
         <section class="ShowCommentsClass">
-              
+
             @include('CommentsPage')
-           
+
         </section>
 
     </div>
