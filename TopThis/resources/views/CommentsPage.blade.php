@@ -1,12 +1,11 @@
 
 
-<button onclick="show_comments_class(2,{{$top->id}})">Default</button>
-<button onclick="show_comments_class(1,{{$top->id}})">by Up Vote</button>  
+
 
 <?php $comments = $top->show(); ?>
 
-<div id="ShowDefaultComments{{$top->id}}" Style="display:block;">
-    {{ $comments->appends(["page$top->id" =>$comments->currentPage()])->links() }} 
+<div id="ShowDefaultComments{{$top->id}}" Style="">
+    {{-- $comments->appends(["page$top->id" =>$comments->currentPage()])->links() --}} 
 
     <p> Default</p>
     @foreach($comments as $comment)
@@ -17,11 +16,9 @@
         <div class="content_com"><p>{!! nl2br(e($comment->body)) !!}</p></div>
         <div class="footer_com">
             <button onclick="open_comments({{$top->id}})"><a href="#tag">New comment</a></button>
-
             @guest
 
             @else                         
-
             @if(Auth::user()->name != $comment->user->name)
             <button onclick="show_commentreplay({{$comment->id}})">Replay</button>  
             @else
@@ -79,7 +76,7 @@
 </div>
 <?php $comments = $top->showUpVote(); ?>
 <div id="ShowUpVoteComments{{$top->id}}" Style="display:none;">
-    {{ $comments->appends(["pageup$top->id" =>$comments->currentPage()])->links() }} 
+    {{-- $comments->appends(["pageup$top->id" =>$comments->currentPage()])->links() --}} 
 
     <p>by Up Vote</p>
     @foreach($comments as $comment)

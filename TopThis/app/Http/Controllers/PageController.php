@@ -24,16 +24,15 @@ class PageController extends Controller {
     public function index($main, $slug, Request $request) {
         //
         $one = $slug;
-        $returntyp = $request->returntyp;
+  
         $id = MainPage::where('name', $main)->first()->id;
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
 
-            $tops = Top::where('page_id', $page->id)->orderBy('id')->take(10)->get();
-
+            $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(9);
             if ($request->ajax()) {
-                $top = Top::where('id', $returntyp)->first();
-                return view('CommentsPage', ['top' => $top])->render();
+              //  $top = Top::where('id', $returntyp)->first();
+                return view('TopsPage', ['tops' => $tops])->render();
             }
             return view('page', compact('one', 'page', 'tops'));
         }

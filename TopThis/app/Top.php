@@ -20,21 +20,19 @@ class Top extends Model {
         return $this->hasMany('App\Comment', 'top_id', 'id');
     }
 
-    public function show() {        //
-        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('id')->Paginate(3, ['*'], "page$this->id");
 
-
-        return $comments;
-    }
 
     public function showUpVote() {        //
-        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('up_vote')->Paginate(3, ['*'], "pageup$this->id");
+        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('up_vote', 'desc')->take(6)->get();//->Paginate(4, ['*'], "pageup$this->id");
 
         return $comments;
     }
-
+    public function show()  {        //
+        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('created_at')->take(6)->get();//->Paginate(4, ['*'], "page$this->id");
+        return $comments;
+    }
     public function showDownVote() {        //
-        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('down_vote')->Paginate(2, ['*'], "pagedown$this->id");
+        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('down_vote', 'desc')->take(6)->get();//->Paginate(4, ['*'], "pagedown$this->id");
 
         return $comments;
     }

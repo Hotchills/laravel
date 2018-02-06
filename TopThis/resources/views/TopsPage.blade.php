@@ -1,12 +1,11 @@
 
-<div class="showtops">
+<div class="showtops" id="clickdoc">
     @foreach($tops as $top)    
-    <div id="top_nr{{$top->id}}" class="top-heading" onclick="show({{$top->id}})">                    
+    <div id="top_nr{{$top->id}}" class="top-heading">                    
         <h1>{{$top->title}}</h1>            
         <br>
         <p >{{$top->body}}</p>               
     </div> 
-    <button  onclick="show({{$top->id}})">Show {{$top->id}}</button>
     <div id="idi{{$top->id}}" class="ascunde">
         <h1>{{$top->title}}</h1>  
 
@@ -23,13 +22,11 @@
         </div>  
         @endguest  
 
-
         <?php $comments = $top->show(); ?>
 
-
-
         <section class="ShowCommentsClass">
-
+<button class="button_comments_Default" id="button_comments_Default{{$top->id}}" >Default</button>
+<button class="button_comments_UpVote" id="button_comments_UpVote{{$top->id}}" >by Up Vote</button>  
             @include('CommentsPage')
 
         </section>
@@ -39,7 +36,7 @@
     @endforeach 
 </div>
 
-
+{{ $tops->links() }}
 {{-- paginate comments + tops
 @include('pagination.pagination_stats', ['paginator' => $tops])
 {{ $tops->links('pagination.pagination_links') }} 

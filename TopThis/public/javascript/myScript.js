@@ -1,6 +1,96 @@
-var idglobal = 1;
-var globalvar = 0;
-var tempglobal=0;
+
+
+
+$(document).ready(function () {
+         var firsttopid= $('#clickdoc div').eq(0).attr('id');
+         var i = Number(firsttopid.slice(6));
+            show(i);
+
+
+    $('.ShowTopsClass').on('click', '.pagination a', function (event)
+    {
+        //      $('li').removeClass('active');
+        //     $(this).parent('li').addClass('active');
+        event.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        var url = $(this).attr('href');
+        getData(page);
+        window.history.pushState("", "", url);
+
+    });
+
+    $('#clickdoc').on('click', '.top-heading', function () {
+        var i = Number(this.id.slice(6));
+        show(i);
+        /* Removing ajax call and pagination on tops page    
+         *  $('.ShowCommentsClass').on('click', '.pagination a', function (e) {
+         e.preventDefault();
+         globalvar = 1;
+         //      var url = $(this).attr('href').split('?top=')[1];
+         var url = $(this).attr('href');
+         //  console.log($(this).attr('href'));
+         getArticles(url);
+         window.history.pushState("", "", url);
+         });
+         */
+        $('.ShowCommentsClass').on('click', '.button_comments_Default', function () {
+            var j = Number(this.id.slice(23));
+            show_comments_class(2, j);
+            console.log(' button default', j);
+        });
+        $('.ShowCommentsClass').on('click', '.button_comments_UpVote', function () {
+            var k = Number(this.id.slice(22));
+            show_comments_class(1, k);
+            console.log(' button upvote', k);
+        });
+    });
+
+});
+
+function getData(page) {
+    $.ajax(
+            {
+                url: '?page=' + page,
+                type: "get",
+                datatype: "html",
+            })
+            .done(function (data)
+            {
+                $(".ShowTopsClass").empty().html(data);
+                //  location.hash = page;
+            //    show(1);
+         //   $('#clickdoc').first().attr('id')
+         
+         var firsttopid= $('#clickdoc div').eq(0).attr('id');
+         var i = Number(firsttopid.slice(6));
+            show(i);
+         
+                $('#clickdoc').on('click', '.top-heading', function () {
+                    var x = Number(this.id.slice(6));
+                      console.log('click', x);
+                      
+                    show(x);
+                    $('.ShowCommentsClass').on('click', '.button_comments_Default', function () {
+                        var j = Number(this.id.slice(23));
+                        show_comments_class(2, j);
+                        console.log(' button default', j);
+                    });
+                    $('.ShowCommentsClass').on('click', '.button_comments_UpVote', function () {
+                        var k = Number(this.id.slice(22));
+                        show_comments_class(1, k);
+                        console.log(' button upvote', k);
+                    });
+                });
+
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError)
+            {
+                alert('No response from server');
+            });
+}
+
+
+
 function show(id) {
     var allDivs = document.getElementsByClassName('ascunde');
     var Divs = document.getElementsByClassName('top-heading');
@@ -13,78 +103,52 @@ function show(id) {
         Divs[j].style.backgroundColor = "white";
     }
     document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
-    idglobal = id;
-    console.log('globalvar = ');
-    console.log(globalvar);
-    if (globalvar == 1) {
-        var url = $(this).attr('href');
 
-        getArticles(url);
-        window.history.pushState("", "", url);
-        function getArticles(url) {
-            $.ajax({
-                url: url,
-                type: "get",
-                datatype: "html",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {returntyp: idglobal}
-            })
-                    .done(function (data) {
-                        console.log(idglobal);
-                        $('.ShowCommentsClass').html(data);
 
-                    }).fail(function (jqXHR, ajaxOptions, thrownError) {
-                alert('tops could not be loaded.');
-            });
-        }
-    }
+    /* ajax call for pagination - not used
+     if (globalvar == 1) {
+     var url = $(this).attr('href');
+     getArticles(url);
+     window.history.pushState("", "", url);
+     }
+     */
 }
 
-
+/* ajax call for pagination - not used
+ function getArticles(url) {
+ $.ajax({
+ url: url,
+ type: "get",
+ datatype: "html",
+ headers: {
+ 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+ },
+ data: {returntyp: idglobal}
+ })
+ .done(function (data) {
+ console.log(idglobal);
+ $('.ShowCommentsClass').html(data);
+ show_comments_class(tempglobal, idglobal);
+ }).fail(function (jqXHR, ajaxOptions, thrownError) {
+ alert('tops could not be loaded.');
+ });
+ }
+ 
+ */
 window.onscroll = function () {
     myFunction123();
 };
-/* var num = document.getElementById('myId').clientHeight; */
+/* 
+ window.onload = function () {
+ var ids = $('.red').map(function(){
+ return this.id
+ }).get()
+ 
+ show(1);
+ };
+ 
+ /* var num = document.getElementById('myId').clientHeight; */
 // mutiple requests on ajax : https://stackoverflow.com/questions/42873712/render-multiple-blade-view-sections-on-ajax-request
-$(function () {
-    //  $(window).on('hashchange', function () {
-    //      url = window.location.hash.replace('#', '');
-
-    //  });
-    if ($('body').is('.BodyOfPage')) {
-        $(document).on('click', '.pagination a', function (e) {
-            e.preventDefault();
-            globalvar = 1;
-            //      var url = $(this).attr('href').split('?top=')[1];
-            var url = $(this).attr('href');
-            //  console.log($(this).attr('href'));
-            getArticles(url);
-            window.history.pushState("", "", url);
-        });
-
-        function getArticles(url) {
-            $.ajax({
-                url: url,
-                type: "get",
-                datatype: "html",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {returntyp: idglobal}
-            })
-                    .done(function (data) {
-                        console.log(idglobal);
-                        $('.ShowCommentsClass').html(data);
-show_comments_class(tempglobal, idglobal) ;
-                    }).fail(function (jqXHR, ajaxOptions, thrownError) {
-                alert('tops could not be loaded.');
-            });
-        }
-    }
-});
-
 
 
 function upvotecomment(temp, vote) {
@@ -188,24 +252,18 @@ function open_comments(id) {
     }
 }
 function show_comments_class(type, id) {
-    console.log(id);
+
     var temp = type;
     var x = document.getElementById('ShowDefaultComments' + id);
     var y = document.getElementById('ShowUpVoteComments' + id);
-    console.log(x);
-    console.log(y);
     if (temp == 1) {
         x.style.display = 'none';
         y.style.display = 'block';
 
-
     } else if (temp == 2) {
         y.style.display = 'none';
         x.style.display = 'block';
-
     }
-    
-    tempglobal=temp;
 
 }
 
