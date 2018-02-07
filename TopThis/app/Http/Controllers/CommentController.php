@@ -55,7 +55,7 @@ class CommentController extends Controller {
         $comment->user_id = $u_id;
         $comment->body = $request->body;
         $comment->top()->associate($top);
-        $comment->approuved=NULL;//1 - needs to be approuved by admin/moderator
+        $comment->approuved = NULL; //1 - needs to be approuved by admin/moderator
         $user = User::find($comment->user_id);
         $comment->user()->associate($user);
         $comment->save();
@@ -63,7 +63,7 @@ class CommentController extends Controller {
     }
 
     public function storereplay(Request $request, $top_id, $parent_id) {
-        
+
         $top = Top::find($top_id);
         if (Auth::check()) {
             $u_id = Auth::id();
@@ -75,7 +75,6 @@ class CommentController extends Controller {
         $comment->user_id = $u_id;
         $comment->body = $request->body;
         $comment->top()->associate($top);
-
         $user = User::find($comment->user_id);
         $comment->user()->associate($user);
 
@@ -123,44 +122,45 @@ class CommentController extends Controller {
     public function deletecomment(Request $request) {
         //
         $request->all();
-        $temp=  $request->commentid;
-         $comment=Comment::where('id',$temp)->first();
-        
-     //   $comment=Comment::where($temp,'id')->get();
-        $comment->approuved=2; // do not whow comment
+        $temp = $request->commentid;
+        $comment = Comment::where('id', $temp)->first();
+        //   $comment=Comment::where($temp,'id')->get();
+        $comment->approuved = 2; // do not whow comment
         $comment->save();
-         
-        return response()->json(['message' => $comment->id]);      
+
+        return response()->json(['message' => $comment->id]);
     }
-    
-    public function incrementvote(Request $request){
-        
+
+    public function incrementvote(Request $request) {
+
         $request->all();
-        $commentid =  $request->commentid;
-        $temp=Comment::where('id',$commentid)->first();
-        if( $temp->up_vote === NULL){
-            $temp->up_vote=1;         
-        }else{
-        $temp->increment('up_vote');
+        $commentid = $request->commentid;
+        $temp = Comment::where('id', $commentid)->first();
+        if ($temp->up_vote === NULL) {
+            $temp->up_vote = 1;
+        } else {
+            $temp->increment('up_vote');
         }
         $temp->save();
-        
-    //    return response()->json(['status' => 'success'], 201);
-    return response()->json(['message' => $temp->id]);
+
+        //    return response()->json(['status' => 'success'], 201);
+        return response()->json(['message' => $temp->id]);
     }
-        public function decrementvote(Request $request){
-        
+
+    public function decrementvote(Request $request) {
+
         $request->all();
-        $commentid =  $request->commentid;
-        $temp=Comment::where('id',$commentid)->first();
-        if( $temp->down_vote === NULL ){
-            $temp->down_vote=1;         
-        }else{
-        $temp->increment('down_vote');
+        $commentid = $request->commentid;
+        $temp = Comment::where('id', $commentid)->first();
+        if ($temp->down_vote === NULL) {
+            $temp->down_vote = 1;
+        } else {
+            $temp->increment('down_vote');
         }
         $temp->save();
-        
-    //    return response()->json(['status' => 'success'], 201);
-    return response()->json(['message' => $temp->id]);
+
+        //    return response()->json(['status' => 'success'], 201);
+        return response()->json(['message' => $temp->id]);
     }
+
 }

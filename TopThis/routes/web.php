@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Route::post('/topage', 'TestController@store');
 //Route::get('/{topage}', 'TopController@search');
 
-Route::get('/CreateTop', 'TopController@index');
+Route::get('/CreateTop', 'TopController@index1');
 Route::get('/CreateMainPage', 'MainPageController@index1');
 Route::get('/CreatePage', 'PageController@index1');
 
@@ -48,3 +48,4 @@ Route::post('/deletecomment' , 'CommentController@deletecomment');
 //dinamic :
 Route::get('/{main}/{slug}', 'PageController@index');
 Route::get('/{main}', 'MainPageController@index');
+Route::get('/{main}/{slug}/{top}', 'TopController@index');

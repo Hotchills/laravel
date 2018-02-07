@@ -1,6 +1,12 @@
 
+@if (session()->has('message'))
+<div class="alert alert-success">
+    {{ session()->get('message') }}
+</div>
+@endif
 
-
+<button class="button_comments_Default" id="button_comments_Default{{$top->id}}" >Default</button>
+<button class="button_comments_UpVote" id="button_comments_UpVote{{$top->id}}" >by Up Vote</button> 
 
 <?php $comments = $top->show(); ?>
 
@@ -74,6 +80,7 @@
     @endforeach 
 
 </div>
+
 <?php $comments = $top->showUpVote(); ?>
 <div id="ShowUpVoteComments{{$top->id}}" Style="display:none;">
     {{-- $comments->appends(["pageup$top->id" =>$comments->currentPage()])->links() --}} 
@@ -104,8 +111,8 @@
         <button onclick="upvotecomment({{$comment->id}},{{$comment->up_vote}})" type="button" class="up"><span id="up_vote_comment{{$comment->id}}" >{{$comment->up_vote}}</span><span Style="color:#1E9E1E; font-size:150%;">&#8657 </span></button>
         <button onclick="downvotecomment({{$comment->id}},{{$comment->down_vote}})" type="button" class="down"> <span id="down_vote_comment{{$comment->id}}" >{{$comment->down_vote}}</span> <span Style="color:#ff0000; font-size:150%;">&#8659 </span></button>                   
     </div>
-    <button id="show_comment_children_button{{$comment->id}}" onclick="show_comment_children({{$comment->id}})">View all replies &#10549;</button>
-    <div id="show_comment_children{{$comment->id}}" Style="display:block;">
+    <button id="show_comment_children_button_upvote{{$comment->id}}" onclick="show_comment_children_upvote({{$comment->id}})">View all replies &#10549;</button>
+    <div id="show_comment_children_upvote{{$comment->id}}" Style="display:none;">
 
         @foreach($comment->showreplays($comment) as $replaycomment)
 
@@ -145,7 +152,6 @@
     </div>
     <div class="clear"></div>
     @endforeach 
-
 
 </div>
 

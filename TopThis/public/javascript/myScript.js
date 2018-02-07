@@ -1,50 +1,31 @@
 
-
-
 $(document).ready(function () {
-         var firsttopid= $('#clickdoc div').eq(0).attr('id');
-         var i = Number(firsttopid.slice(6));
-            show(i);
-
+    var firsttopid = $('#clickdoc div').eq(0).attr('id');
+    var i = Number(firsttopid.slice(6));
+    show(i);
 
     $('.ShowTopsClass').on('click', '.pagination a', function (event)
     {
-        //      $('li').removeClass('active');
-        //     $(this).parent('li').addClass('active');
         event.preventDefault();
         var page = $(this).attr('href').split('page=')[1];
         var url = $(this).attr('href');
         getData(page);
         window.history.pushState("", "", url);
-
     });
-
+    $('.ShowCommentsClass').on('click', '.button_comments_Default', function () {
+        var j = Number(this.id.slice(23));
+        show_comments_class(2, j);
+        console.log(' button default', j);
+    });
+    $('.ShowCommentsClass').on('click', '.button_comments_UpVote', function () {
+        var k = Number(this.id.slice(22));
+        show_comments_class(1, k);
+        console.log(' button upvote', k);
+    });
     $('#clickdoc').on('click', '.top-heading', function () {
         var i = Number(this.id.slice(6));
         show(i);
-        /* Removing ajax call and pagination on tops page    
-         *  $('.ShowCommentsClass').on('click', '.pagination a', function (e) {
-         e.preventDefault();
-         globalvar = 1;
-         //      var url = $(this).attr('href').split('?top=')[1];
-         var url = $(this).attr('href');
-         //  console.log($(this).attr('href'));
-         getArticles(url);
-         window.history.pushState("", "", url);
-         });
-         */
-        $('.ShowCommentsClass').on('click', '.button_comments_Default', function () {
-            var j = Number(this.id.slice(23));
-            show_comments_class(2, j);
-            console.log(' button default', j);
-        });
-        $('.ShowCommentsClass').on('click', '.button_comments_UpVote', function () {
-            var k = Number(this.id.slice(22));
-            show_comments_class(1, k);
-            console.log(' button upvote', k);
-        });
     });
-
 });
 
 function getData(page) {
@@ -57,29 +38,24 @@ function getData(page) {
             .done(function (data)
             {
                 $(".ShowTopsClass").empty().html(data);
-                //  location.hash = page;
-            //    show(1);
-         //   $('#clickdoc').first().attr('id')
-         
-         var firsttopid= $('#clickdoc div').eq(0).attr('id');
-         var i = Number(firsttopid.slice(6));
-            show(i);
-         
+                var firsttopid = $('#clickdoc div').eq(0).attr('id');
+                var i = Number(firsttopid.slice(6));
+                show(i);
+
+                $('.ShowCommentsClass').on('click', '.button_comments_Default', function () {
+                    var j = Number(this.id.slice(23));
+                    show_comments_class(2, j);
+                    console.log(' button default', j);
+                });
+                $('.ShowCommentsClass').on('click', '.button_comments_UpVote', function () {
+                    var k = Number(this.id.slice(22));
+                    show_comments_class(1, k);
+                    console.log(' button upvote', k);
+                });
                 $('#clickdoc').on('click', '.top-heading', function () {
                     var x = Number(this.id.slice(6));
-                      console.log('click', x);
-                      
+                    console.log('click', x);
                     show(x);
-                    $('.ShowCommentsClass').on('click', '.button_comments_Default', function () {
-                        var j = Number(this.id.slice(23));
-                        show_comments_class(2, j);
-                        console.log(' button default', j);
-                    });
-                    $('.ShowCommentsClass').on('click', '.button_comments_UpVote', function () {
-                        var k = Number(this.id.slice(22));
-                        show_comments_class(1, k);
-                        console.log(' button upvote', k);
-                    });
                 });
 
             })
@@ -88,8 +64,6 @@ function getData(page) {
                 alert('No response from server');
             });
 }
-
-
 
 function show(id) {
     var allDivs = document.getElementsByClassName('ascunde');
@@ -104,52 +78,14 @@ function show(id) {
     }
     document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
 
-
-    /* ajax call for pagination - not used
-     if (globalvar == 1) {
-     var url = $(this).attr('href');
-     getArticles(url);
-     window.history.pushState("", "", url);
-     }
-     */
 }
 
-/* ajax call for pagination - not used
- function getArticles(url) {
- $.ajax({
- url: url,
- type: "get",
- datatype: "html",
- headers: {
- 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
- },
- data: {returntyp: idglobal}
- })
- .done(function (data) {
- console.log(idglobal);
- $('.ShowCommentsClass').html(data);
- show_comments_class(tempglobal, idglobal);
- }).fail(function (jqXHR, ajaxOptions, thrownError) {
- alert('tops could not be loaded.');
- });
- }
- 
- */
 window.onscroll = function () {
     myFunction123();
 };
-/* 
- window.onload = function () {
- var ids = $('.red').map(function(){
- return this.id
- }).get()
- 
- show(1);
- };
- 
- /* var num = document.getElementById('myId').clientHeight; */
-// mutiple requests on ajax : https://stackoverflow.com/questions/42873712/render-multiple-blade-view-sections-on-ajax-request
 
+/* var num = document.getElementById('myId').clientHeight; */
+// mutiple requests on ajax : https://stackoverflow.com/questions/42873712/render-multiple-blade-view-sections-on-ajax-request
 
 function upvotecomment(temp, vote) {
 
@@ -169,6 +105,7 @@ function upvotecomment(temp, vote) {
                 console.log(msg['message']);
             });
 }
+
 function downvotecomment(temp, vote) {
 
     document.getElementById('down_vote_comment' + temp).innerHTML = vote + 1;
@@ -214,11 +151,23 @@ function myFunction123() {
     }
 }
 
-
 function show_comment_children(id)
 {
     var x = document.getElementById('show_comment_children' + id);
     var y = document.getElementById('show_comment_children_button' + id);
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+        y.innerHTML = 'Hide replies &#10548;';
+    } else {
+        x.style.display = 'none';
+        y.innerHTML = 'View all replies &#10549;';
+    }
+}
+
+function show_comment_children_upvote(id)
+{
+    var x = document.getElementById('show_comment_children_upvote' + id);
+    var y = document.getElementById('show_comment_children_button_upvote' + id);
     if (x.style.display === 'none') {
         x.style.display = 'block';
         y.innerHTML = 'Hide replies &#10548;';
@@ -236,6 +185,7 @@ function show_comments(id) {
         x.style.display = 'none';
     }
 }
+
 function show_commentreplay(id) {
     var x = document.getElementById('replay' + id);
     if (x.style.display === 'none') {
@@ -251,6 +201,7 @@ function open_comments(id) {
         x.style.display = 'block';
     }
 }
+
 function show_comments_class(type, id) {
 
     var temp = type;
@@ -264,10 +215,7 @@ function show_comments_class(type, id) {
         y.style.display = 'none';
         x.style.display = 'block';
     }
-
 }
-
-
 
 function modalfunction() {
 // Get the modal

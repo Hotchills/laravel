@@ -23,13 +23,12 @@ class PageController extends Controller {
 
     public function index($main, $slug, Request $request) {
         //
-        $one = $slug;
-  
+        $one = $slug;  
         $id = MainPage::where('name', $main)->first()->id;
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
 
-            $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(9);
+            $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(8);
             if ($request->ajax()) {
               //  $top = Top::where('id', $returntyp)->first();
                 return view('TopsPage', ['tops' => $tops])->render();
@@ -55,9 +54,6 @@ class PageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
-
-
         $page = new Page();
         $page->name = $request->name;
         $page->title = $request->title;

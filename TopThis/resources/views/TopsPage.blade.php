@@ -25,8 +25,7 @@
         <?php $comments = $top->show(); ?>
 
         <section class="ShowCommentsClass">
-<button class="button_comments_Default" id="button_comments_Default{{$top->id}}" >Default</button>
-<button class="button_comments_UpVote" id="button_comments_UpVote{{$top->id}}" >by Up Vote</button>  
+ 
             @include('CommentsPage')
 
         </section>

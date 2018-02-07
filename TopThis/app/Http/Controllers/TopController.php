@@ -19,11 +19,29 @@ class TopController extends Controller
      {
      $this->middleware('auth'); 
    }
-    public function index()
+    public function index1()
     {
         //
          return view('CreateTop');
     }
+    
+        public function index($main, $slug, $top, Request $request) {
+        //
+        $one = $slug;  
+
+
+        if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
+
+            $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(8);
+            if ($request->ajax()) {
+              //  $top = Top::where('id', $returntyp)->first();
+                return view('TopsPage', ['tops' => $tops])->render();
+            }
+            return view('page', compact('one', 'page', 'top'));
+        }
+        abort(404);
+    }
+    
 
     /**
      * Show the form for creating a new resource.
