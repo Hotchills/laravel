@@ -13,10 +13,10 @@ class CreateTopTable extends Migration
      */
     public function up()
     {
-         Schema::defaultStringLength(191);
+        Schema::defaultStringLength(191);
         Schema::create('tops', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('body');
+            $table->text('body');            
             $table->text('title');
             $table->integer('page_id')->unsigned();
             $table->integer('up_votes')->nullable();
