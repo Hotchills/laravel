@@ -2,17 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/rep/laravel/TopThis/resources/views/TopsPage.blade.php</file>
-            <file>file:/C:/rep/laravel/TopThis/resources/views/page.blade.php</file>
-            <file>file:/C:/rep/laravel/TopThis/app/Top.php</file>
-            <file>file:/C:/rep/laravel/TopThis/app/Http/Controllers/PageController.php</file>
-            <file>file:/C:/rep/laravel/TopThis/app/Http/Controllers/CommentController.php</file>
-            <file>file:/C:/rep/laravel/TopThis/public/css/menu.css</file>
-            <file>file:/C:/rep/laravel/TopThis/app/Http/Controllers/TopController.php</file>
-            <file>file:/C:/rep/laravel/TopThis/routes/web.php</file>
-            <file>file:/C:/rep/laravel/TopThis/resources/views/CommentsPage.blade.php</file>
-            <file>file:/C:/rep/laravel/TopThis/public/javascript/myScript.js</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
