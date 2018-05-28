@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Using TheMovieDB</title>
+    <meta name="viewport" content="width=device-width">
+    <!-- API version 3 documentation: 
+        https://developers.themoviedb.org/3/search
+        https://developers.themoviedb.org/3/movies
+    -->
+	        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+		
+		<style>
+		#show-movies{
+		list-style-type: none;
+		}
+		
+		#show-movies div{
+		
+		background:#F0F0F0;
+		border:solid 0.5px grey;
+		padding:0px;
+		 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); 
+		 overflow:hidden;
+		  box-shadow: 1px 1px 5px 5px #E8E8E8 inset;
+		}
+		.movies{
+		margin:5px; height:150px;overflow-wrap: break-word;
+		}
+		</style>
+</head>
+<body>
+  
+   <input id="moviesearch" type="text" /><button id="moviesearchbutton">Search</button>
+   
+<div class=" container" style="padding:0px;border:solid 1px black;">
+  <!-- Content here -->
+   <div class="row container" id="show-movies">
+  
+   </div>
+   
+   
+</div>
+   
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script> 
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        
+    <script>
+	
+	$(document).ready(function() {
+    var url = 'http://api.themoviedb.org/3/',
+        mode = 'search/movie?query=',
+        input,
+        movieName,
+        key = '&api_key=8a8c4cbf7c68bc874accbfd9e83cee45';
+
+	 $(".movies").click(function(){
+	     var contentPanelId = $(this).attr("id");
+		console.log(contentPanelId);
+	 });	
+		
+		
+		
+    $('#moviesearchbutton').click(function() {
+	var array = [];
+        var input = $('#moviesearch').val(),
+            movieName = encodeURI(input);
+        $.ajax({
+            type: 'GET',
+            url: url + mode + input + key,
+            async: false,
+            jsonpCallback: 'testing',
+            contentType: 'application/json',
+            dataType: 'jsonp',
+            success: function(json) {
+             console.dir(json);
+			$.each(json.results,function (i, movie) {
+			var $li = $('<div id="firstpage'+ i + '" class="movies col-sm-2 col-md-1 container" ></div>');	
+				$p= $('<p class="col-sm-11 small text-center" Style="color:black;"> <span>' + movie.release_date +'</span> '+ movie.title+'</p>');	
+				$img=$('<img class="col-sm-11" Style="background:white;margin:1px;" src="">');
+				if( movie.poster_path !== null ){
+				$img.attr("src","http://image.tmdb.org/t/p/w154/"+ movie.poster_path );				
+				}
+				else{
+				$img.attr("src","http://www.bookmysports.com/angular/assets/images/no_image.jpg" );	
+				}
+				$li.append($img);
+				$li.append($p);					
+				array.push($li);
+			});
+			$("#show-movies").html(array);			
+			$(".movies").click(function(){			
+				var contentPanelId = $(this).attr("id");
+				numberobj=contentPanelId.slice(9);		 
+				console.log(numberobj);		
+				var savedmovie=array[numberobj];
+				$.ajax({
+					method: "POST",
+					url: 'http://127.0.0.1:8000/AddMovietTop',
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+							},
+					data: {savedmovie : JSON.stringify(savedmovie) }
+						})
+						.done(function (msg) {
+					console.log(msg['message']);
+					});
+				
+				
+			});
+            						
+			},
+            error: function(data) {
+            console.log(data.message);
+
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html>
