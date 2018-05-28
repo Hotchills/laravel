@@ -35,3 +35,4 @@ web/composer.lock
 TopThis/composer.lock
 TopThis/nbproject/private/private.xml
 /TipTop/nbproject/private/
+*.lock
