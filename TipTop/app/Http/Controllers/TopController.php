@@ -6,52 +6,52 @@ use App\Top;
 use Illuminate\Http\Request;
 use Session;
 use App\Page;
+use App\MainPage;
+use Auth;
+use App\LikeTop;
 
+class TopController extends Controller {
 
-class TopController extends Controller
-{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-     {
-     $this->middleware('auth'); 
-   }
-    public function index1()
-    {
-        //
-         return view('CreateTop');
+    public function __construct() {
+        $this->middleware('auth');
     }
-    
-        public function index($main, $slug, $top, Request $request) {
+
+    public function index1($main,$page) {
         //
-        $one = $slug;  
+        $id = MainPage::where('name', $main)->first()->id;
+        $page = Page::where('mainpage_id', $id)->where('name', $page)->first();
+        $Pageid = $page->id;
+        
+        return view('CreateTop',compact('Pageid'));
+    }
+
+    public function index($main, $slug, $top, Request $request) {
+        //
+        $one = $slug;
+        $id = MainPage::where('name', $main)->first()->id;
 
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
 
-            $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
-            if ($request->ajax()) {
-              //  $top = Top::where('id', $returntyp)->first();
-                return view('TopsPage', ['tops' => $tops])->render();
-            }
-            return view('page', compact('one', 'page', 'top'));
+            $toptemp = Top::where('page_id', $page->id)->where('title', $top)->first();
+            
+            return view('SingleTopPage', compact('main', 'page', 'toptemp'));
         }
         abort(404);
     }
-    
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
-       
     }
 
     /**
@@ -60,30 +60,31 @@ class TopController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {      
-                
+    public function store(Request $request) {
+
         $top = new Top();
-        $top->page_id=$request->page_id;
-        $top->title=$request->title;
-        $top->body =$request->body;
-        $page=Page::find($top->page_id);      
-        $top->page()->associate($page);    
-        
-        $top->save();       
-        Session::flash('success','page done');
-        return view('/CreateTop');
-
+        $top->page_id = $request->page_id;
+        $top->title = $request->titletop;
+        $top->body = $request->bodytop;
+        $page = Page::find($top->page_id);
+        $top->page()->associate($page);        
+        $top->save();
+        $mainpage = MainPage::find($page->mainpage_id);
+        $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
+        Session::flash('success', 'page done');
+       
+          //  return view('/AddTopsAfterCreatePage', ['Pagename' =>  $page->title,'PageID' =>  $page->id]);     
+        return redirect()->action('TopController@index',['one' =>$mainpage->name,'page'=>$page->name,'tops'=>$tops]);
     }
-
+    
+   
     /**
      * Display the specified resource.
      *
      * @param  \App\Top  $top
      * @return \Illuminate\Http\Response
      */
-    public function show()
-    {
+    public function show() {
         //
     }
 
@@ -93,8 +94,7 @@ class TopController extends Controller
      * @param  \App\Top  $top
      * @return \Illuminate\Http\Response
      */
-    public function edit(Top $top)
-    {
+    public function edit(Top $top) {
         //
     }
 
@@ -105,8 +105,7 @@ class TopController extends Controller
      * @param  \App\Top  $top
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Top $top)
-    {
+    public function update(Request $request, Top $top) {
         //
     }
 
@@ -116,11 +115,71 @@ class TopController extends Controller
      * @param  \App\Top  $top
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Top $top)
-    {
+    public function destroy(Top $top) {
         //
     }
 
-    
-    
+    public function AddTopsAfterCreatePage() {
+
+        return view('AddTopsAfterCreatePage');
+        //
+    }
+
+    public function incrementvotetop(Request $request) {
+
+        $request->all();
+        $topid = $request->topid;
+        $user = Auth::user();
+        $like = LikeTop::where('top_id', $topid)->where('user_id', $user->id)->first();
+
+        if (count($like) > 0) {
+            if ($like->liketop == 1) {
+                $like->liketop = 0;
+                $like->save();
+            } else {
+                $like->liketop = 1;
+                $like->save();
+            }
+        } else {
+            $like = new LikeTop();
+            $like->top_id = $topid;
+            $like->liketop = 1;  // 0-unknown 1-liked  2-disliked
+            $like->user_id = $user->id;
+            $like->save();
+        }
+        //    return response()->json(['status' => 'success'], 201);
+        $likes = $like->upvotestop();
+        $dislikes = $like->downvotestop();
+        return response()->json(['likes' => $likes, 'dislikes' => $dislikes]);
+    }
+
+    public function decrementvotetop(Request $request) {
+
+        $request->all();
+        $topid = $request->topid;
+        $user = Auth::user();
+
+        $like = LikeTop::where('top_id', $topid)->where('user_id', $user->id)->first();
+        if (count($like) > 0) {
+            if ($like->liketop == 2) {
+                $like->liketop = 0;
+                $like->save();
+            } else {
+                $like->liketop = 2;
+                $like->save();
+            }
+        } else {
+            $like = new LikeTop();
+            $like->top_id = $topid;
+            $like->liketop = 2; // 0-unknown 1-like  2-means dislike
+            $like->user_id = $user->id;
+            $like->save();
+        }
+
+        $likes = $like->upvotestop();
+        $dislikes = $like->downvotestop();
+        //    return response()->json(['status' => 'success'], 201);
+        return response()->json(['likes' => $likes, 'dislikes' => $dislikes]);
+    }
+
 }
