@@ -19,7 +19,6 @@ class MainPageController extends Controller {
      $this->middleware('auth',['except'=>'index']); 
    }
     public function index($main) {
-
         //   $pages=Page::all();
 
         if ($mainpage = MainPage::where('name', $main)->first()) {
@@ -63,7 +62,8 @@ class MainPageController extends Controller {
 
         //   return Redirect::back()->withInput();
 
-        return view('/CreateMainPage');
+      //  return view('/CreateMainPage');
+          return redirect()->action('MainPageController@index',['main'=>$mainpage->name]);
     }
 
     /**
