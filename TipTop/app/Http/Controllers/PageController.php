@@ -33,14 +33,15 @@ class PageController extends Controller {
               //  $top = Top::where('id', $returntyp)->first();
                 return view('TopsPage', ['tops' => $tops])->render();
             }
-            return view('page', compact('one', 'page', 'tops'));
+            return view('page', compact('main', 'page', 'tops'));
         }
         abort(404);
     }
 
-    public function index1() {
-
-        return view('CreatePage');
+    public function index1($main) {
+              
+        $MainPageid = MainPage::where('name', $main)->first()->id;
+        return view('/CreatePage',compact('MainPageid'));
     }
 
     public function create() {
@@ -53,24 +54,30 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request) {      
         $page = new Page();
+        $page->page_type=$request->page_type;
         $page->name = $request->name;
         $page->title = $request->title;
         $page->body = $request->body;
         $page->mainpage_id = $request->mainpage_id;
         $mainpage = MainPage::find($page->mainpage_id);
         $page->mainpage()->associate($mainpage);
-
         $page->save();
-
+        $page_id=$page->id;
+        $page_name=$page->name;
+        $mainpage_name=$mainpage->name;
+         $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
         //   $tops=Top::where('page_name',$one)->get();
-
-        Session::flash('success', 'page done');
-
-        return view('/CreatePage');
+       // Session::flash('success', 'page done');
+//if($page->page_type == '0')
+ //       return view('AddTopsAfterCreatePage', ['Pagename' =>  $page->title,'PageID' =>  $page->id]);
+//elseif($page->page_type == '1')
+//     return view('/AddMovieInDB', compact('page_id','page_name','mainpage_name'));
+//else return view('/');
+    
         //   return Redirect::back()->withInput();
-        //   return view('page',compact('one','page','tops'));
+           return redirect()->action('TopController@index',['one' =>$mainpage->name,'page'=>$page->name,'tops'=>$tops]);
     }
 
     /**
