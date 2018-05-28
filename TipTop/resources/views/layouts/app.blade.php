@@ -7,6 +7,10 @@
 
         <title>TipTop</title>
 
+        <!-- CSRF Token -->
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
@@ -16,15 +20,20 @@
             <!-- Styles laravel welocome page-->
 
             html, body {
-                             
+
                 background-color: #fff;
                 color: #636b6f;
-             
+
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
+                font-size: 16px;
             }
-            
+            .navbar-brand{
+                font-size: 24px;
+                color: black;
+
+            }
             .full-height {
                 height: 100vh;
             }
@@ -56,7 +65,7 @@
             .links > a {
                 color: #636b6f;
                 padding: 0 25px;
-                font-size: 12px;
+                font-size: 18px;
                 font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
@@ -114,7 +123,7 @@
 
             .mega-dropdown-menu .dropdown-header {
                 color: #428bca;
-                font-size: 18px;
+                font-size: 24px;
                 font-weight:bold;
             }
             .mega-dropdown-menu form {
@@ -123,31 +132,310 @@
             .mega-dropdown-menu .form-group {
                 margin-bottom: 3px;
             }
-            
-            .vertical-align {
-    display: flex;
-    align-items: center;
-}
 
+            .vertical-align {
+                display: flex;
+                align-items: center;
+            }
+
+            .ascunde {    
+                border-radius: 5px;
+                border:1px solid grey;
+                cursor: default;
+                display: none;
+                right:0px;
+                top:0px;
+                padding:20px;
+            }
+
+            .afiseaza {
+                display:block;
+                right:0px;
+            }
+            .top-heading{
+                width: 100%;
+                position:relative;
+                border-radius:5px;
+                padding:20px;
+                background: white;
+                height:auto;
+                font-size:24px;
+                color:black;
+                border:1px solid #C0C0C0;     
+            }
+
+            .top-heading:hover{
+                cursor: pointer;
+
+            }
+
+            .pb-cmnt-textarea {
+                resize: none;
+                padding: 10px;
+                height: 130px;
+                width: 100%;
+                border: 1px solid #F2F2F2;
+            }
+            .thumbnail {
+                padding:0px;
+                width:13%;
+                float:left;
+
+            }
+            .panel {
+                height: 100%;
+                position:relative;
+                left:15px;
+                top:10px;
+                padding:0px;
+                width:85%;
+                float:left;
+            }
+            .panel-comment{
+                height: 100%;
+                position:relative;
+                left:15px;
+                top:10px;
+                padding:0px;
+                width:100%;
+                float:left;
+            }
+            .panel>.panel-heading:after,.panel>.panel-heading:before{
+                position:absolute;
+                top:11px;left:-16px;
+                right:100%;
+                width:0;
+                height:0;
+                display:block;
+                content:" ";
+                border-color:transparent;
+                border-style:solid solid outset;
+                pointer-events:none;
+            }
+            .panel>.panel-heading:after{
+                border-width:7px;
+                border-right-color:#f7f7f7;
+                margin-top:1px;
+                margin-left:2px;
+            }
+            .panel>.panel-heading:before{
+                border-right-color:#ddd;
+                border-width:8px;
+            }
+
+            @media (max-width: 768px) {
+                .btn {
+                    padding:2px 4px;
+                    font-size:80%;
+                    line-height: 1;
+                }
+            }
+
+            @media (min-width: 769px) and (max-width: 992px) {
+                .btn {
+                    padding:4px 9px;
+                    font-size:90%;
+                    line-height: 1.2;
+                }
+            }
+             <!-- Styles laravel add movie in DB -->
+            
+            #show-movies{
+                list-style-type: none;
+                height: auto;
+            }
+
+            #show-movies li{		
+                background:#F0F0F0;
+                min-height:250px;
+                border:solid 0.1px grey;
+                padding:10px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); 
+                overflow:hidden;
+                box-shadow: 1px 1px 5px 5px #E8E8E8 inset;
+            }
+
+            .movies{
+                margin:5px; height:150px;overflow-wrap: break-word;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-              @include('layouts.menu')  
+            @include('layouts.menu')  
 
-        <main style="padding:10px;border:1px solid Gainsboro;border-radius: 5px;">
-            
-            
-            @yield('content')
-            
-        </main>
-        
- </div>
-              
-              
+            <main style="padding:10px;border:1px solid Gainsboro;border-radius: 5px;">
+
+
+                @yield('content')
+
+            </main>
+
+        </div>
+
+
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script> 
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="bootstrap-hover-dropdown.min.js"></script>
+      <!--  <script src="bootstrap-hover-dropdown.min.js"></script> -->
 
+        <script>
+$(document).ready(function () {
+
+
+    $(".commentid").detach().appendTo("#clickdoc");
+
+    $('#clickdoc').on('click', '.top-heading', function () {
+        var i = Number(this.id.slice(6));
+        show(i);
+    });
+
+    $('.up-comment').click(function () {
+        var id = Number($(this).attr('id').slice(15));
+        upvotecomment(id);
+    });
+    $('.down-comment').click(function () {
+        var id = Number($(this).attr('id').slice(17));
+        downvotecomment(id);
+    });
+    $('.up-top').click(function () {
+        var id = Number($(this).attr('id').slice(11));
+        //   console.log(id);
+        upvotetop(id);
+    });
+    $('.down-top').click(function () {
+        var id = Number($(this).attr('id').slice(13));
+        //   console.log(id);
+        downvotetop(id);
+    });
+
+});
+
+
+function show(id) {
+    var allDivs = document.getElementsByClassName('ascunde');
+    var Divs = document.getElementsByClassName('top-heading');
+    for (var i = 0; i < allDivs.length; i++) {
+        allDivs[i].classList.remove('afiseaza');
+    }
+    document.getElementById('idi' + id).classList.add('afiseaza');
+
+    for (var j = 0; j < Divs.length; j++) {
+        Divs[j].style.backgroundColor = "white";
+    }
+    document.getElementById('top_nr' + id).style.backgroundColor = "#C0C0C0";
+
+}
+
+function upvotecomment(temp) {
+
+    // document.getElementById('up_vote_comment' + temp).innerHTML = vote + 1;
+
+    var commentid = temp;
+
+    $.ajax({
+        method: "POST",
+        url: 'http://127.0.0.1:8000/incrementvote',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {commentid: commentid}
+    })
+            .done(function (data) {
+                //   console.log(data['likes']);
+                var likes = data['likes'];
+                document.getElementById('nr-up-vote-comment' + temp).innerHTML = likes;
+                //  console.log(data['dislikes']);
+                var dislikes = data['dislikes'];
+                document.getElementById('nr-down-vote-comment' + temp).innerHTML = dislikes;
+            });
+}
+
+function downvotecomment(temp) {
+
+    //  document.getElementById('down_vote_comment' + temp).innerHTML = vote + 1;
+
+    var commentid = temp;
+
+    $.ajax({
+        method: "POST",
+        url: 'http://127.0.0.1:8000/decrementvote',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {commentid: commentid}
+    })
+            .done(function (data) {
+                // console.log(data['message']);
+                //   console.log(data['likes']);
+                var likes = data['likes'];
+                document.getElementById('nr-up-vote-comment' + temp).innerHTML = likes;
+                //  console.log(data['dislikes']);
+                var dislikes = data['dislikes'];
+                document.getElementById('nr-down-vote-comment' + temp).innerHTML = dislikes;
+            });
+}
+function upvotetop(temp) {
+
+    var topid = temp;
+    console.log(topid);
+    $.ajax({
+        method: "POST",
+        url: 'http://127.0.0.1:8000/incrementvotetop',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {topid: topid}
+    })
+            .done(function (data) {
+                var likes = data['likes'];
+                document.getElementById('nr-up-vote-top' + temp).innerHTML = likes;
+                //  console.log(data['dislikes']);
+                var dislikes = data['dislikes'];
+                document.getElementById('nr-down-vote-top' + temp).innerHTML = dislikes;
+            });
+}
+
+function downvotetop(temp) {
+
+    var topid = temp;
+    console.log(topid);
+    $.ajax({
+        method: "POST",
+        url: 'http://127.0.0.1:8000/decrementvotetop',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {topid: topid}
+    })
+            .done(function (data) {
+                var likes = data['likes'];
+                document.getElementById('nr-up-vote-top' + temp).innerHTML = likes;
+                //  console.log(data['dislikes']);
+                var dislikes = data['dislikes'];
+                document.getElementById('nr-down-vote-top' + temp).innerHTML = dislikes;
+            });
+}
+
+function deletecomment(temp) {
+
+    var commentid = temp;
+
+    $.ajax({
+        method: "POST",
+        url: 'http://127.0.0.1:8000/deletecomment',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {commentid: commentid}
+    })
+            .done(function (msg) {
+                console.log(msg['message']);
+            });
+}
+function editcomment(temp) {
+
+}
+
+        </script>
     </body>
 </html>

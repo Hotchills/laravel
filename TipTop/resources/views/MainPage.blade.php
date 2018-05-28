@@ -38,6 +38,6 @@
     @endif
     <br>
     <br>
-    <a href="{{route('CreatePage')}}">CreatePage</a>
+    <a href="{{route('CreatePage',['main'=>$mainpage->name])}}">CreatePage</a>
 </div>
 @endsection

@@ -9,6 +9,8 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+ * 
+ * it is the norm to return a View when you use a GET request and to Redirect somewhere after you've sent a POST request.
 */
 
 
@@ -21,9 +23,15 @@ Route::get('/', 'HomeController@index')->name('home');
 //Route::post('/topage', 'TestController@store');
 //Route::get('/{topage}', 'TopController@search');
 
-Route::get('/CreateTop', 'TopController@index1')->name('CreateTop');
+Route::get('/{main}/{page}/CreateTop',['as' => 'CreateTop' , 'uses' =>  'TopController@index1']);
+Route::get('/AddTopsAfterCreatePage', 'TopController@AddTopsAfterCreatePage')->name('AddTopsAfterCreatePage');
 Route::get('/CreateMainPage', 'MainPageController@index1')->name('CreateMainPage');
-Route::get('/CreatePage', 'PageController@index1')->name('CreatePage');
+Route::get('/{main}/CreatePage',['as' => 'CreatePage' , 'uses' => 'PageController@index1']);
+Route::get('/AddMovieInDB', 'MovieController@index');
+//dinamic :
+Route::get('/{main}', 'MainPageController@index');
+Route::get('/{main}/{slug}', 'PageController@index');
+Route::get('/{main}/{slug}/{top}', 'TopController@index');
 
 
 //store :
@@ -35,16 +43,12 @@ Route::post('/{top_id}/{parent_id}/comment' , ['uses'=> 'CommentController@store
 Route::post('/incrementvote' , 'CommentController@incrementvote');
 Route::post('/decrementvote' , 'CommentController@decrementvote');
 Route::post('/deletecomment' , 'CommentController@deletecomment');
-
+Route::post('/incrementvotetop' , 'TopController@incrementvotetop');
+Route::post('/decrementvotetop' , 'TopController@decrementvotetop');
+Route::post('/StoreMovietTop', 'MovieController@store');
 //Route::get('/comment1' , 'CommentController@showincrement' );
-
 //edit/delete comments 
 //Route::get('/comment/{id}/edit' , ['uses'=> 'CommentController@edit','as'=>'comment.edit' ]);
 //Route::put('/comment/{id}', ['uses'=> 'CommentController@update','as'=>'comment.update' ]);
 //Route::delete('/comment/{id}', ['uses'=> 'CommentController@destroy','as'=>'comment.destroy' ]);
 
-
-//dinamic :
-Route::get('/{main}/{slug}', 'PageController@index');
-Route::get('/{main}', 'MainPageController@index');
-Route::get('/{main}/{slug}/{top}', 'TopController@index');
