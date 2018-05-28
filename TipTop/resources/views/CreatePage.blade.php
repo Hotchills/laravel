@@ -5,28 +5,33 @@
 
     <div class="form-inline">
 
-                    {{Form::open(['route'=>'page.store','method'=>'POST'])}}
-                    {{Form::label('name','Name:')}}
-                    {{Form::text('name','',['class'=>'form-control'])}}
-                    
-                    </div>   
-                  
+        {{Form::open(['route'=>'page.store','method'=>'POST'])}}
+        {{Form::label('name','Name:')}}
+        {{Form::text('name','',['class'=>'form-control'])}}
+
+    </div>   
+
     <div class="form-inline">
-                    {{Form::label('mainpage_id','ParentPageID:')}}
-                    {{Form::text('mainpage_id','',['class'=>'form-control'])}}
+
+        {{Form::hidden('mainpage_id',$MainPageid)}}
     </div>           
     <div class="form-inline">
-                    {{Form::label('title','Title:')}}
-                    {{Form::text('title','Title',['class'=>'form-control'])}}
+        {{Form::label('title','Title:')}}
+        {{Form::text('title','Title',['class'=>'form-control'])}}
     </div>           
     <div class="form-inline">
-                    {{Form::label('body','body:')}}
-                    {{Form::textarea('body','Body',['class'=>'form-control','rows'=>'7'])}}
+        {{Form::label('body','body:')}}
+        {{Form::textarea('body','Body',['class'=>'form-control','rows'=>'7'])}}
     </div>
-                    {{Form::submit('Add page',['class'=>'btn btn-primary'])}}    
+    
+    <div class="form-inline">
+    {{Form::select('page_type', array('0' => 'None', '1' => 'Movie'), '0')}}
+     </div>
+    
+    {{Form::submit('Add page',['class'=>'btn btn-primary'])}}    
 
 
-                    {{ Form::close() }}
-                    
- </div>     
-                    @endsection
+    {{ Form::close() }}
+
+</div>     
+@endsection

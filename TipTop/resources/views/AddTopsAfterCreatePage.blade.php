@@ -1,15 +1,17 @@
+
+
 @extends('layouts.app')
 
 @section('content')
+<p>Please add the tops to page: {{$Pagename}} and ID: {{$PageID}}</p>
+
+
 
 <div style=" margin: auto;width: 50%;">
-<a> {{$Pageid}} </a>
+
     <div class="form-inline">
         {{Form::open(['route'=>'top.store','method'=>'POST'])}}
-
-
-        
-        {{Form::hidden('page_id',$Pageid)}}
+        {{Form::hidden('page_id',$PageID)}}
     </div>
 
     <div class="form-inline">
@@ -21,13 +23,12 @@
         {{Form::textarea('bodytop','Body',['class'=>'form-control','rows'=>'7'])}}
     </div>
     
-   
     {{Form::submit('Add top',['class'=>'btn btn-primary'])}}    
 
 
     {{ Form::close() }}
 
 
-</div>   
+</div> 
 
 @endsection
