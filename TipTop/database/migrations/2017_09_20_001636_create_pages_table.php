@@ -22,6 +22,7 @@ class CreatePagesTable extends Migration
             $table->integer('mainpage_id')->unsigned();
             $table->integer('views')->nullable();
             $table->integer('comment_nr')->nullable();
+            $table->string('page_type');
             $table->timestamps();           
           }); 
         Schema::table('pages', function (Blueprint $table)
