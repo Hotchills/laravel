@@ -15,26 +15,47 @@ class Top extends Model {
     public function page() {
         return $this->belongsTo('App\Page', 'page_id', 'id');
     }
+    public function movie() {
+        return $this->hasOne('App\Movie', 'top_id', 'id');
+    }
 
     public function comments() {
         return $this->hasMany('App\Comment', 'top_id', 'id');
     }
 
-
+    public function liketops() {
+        return $this->hasMany('App\LikeTop');
+    }
+    
+    public function upvotestop()
+    {
+         $likes=LikeTop::where('top_id',  $this->id)->where('liketop','1')->count();
+        return $likes;
+    }
+        public function downvotestop()
+    {
+        $dislikes=LikeTop::where('top_id', $this->id)->where('liketop','2')->count();
+        return $dislikes;
+    }
 
     public function showUpVote() {        //
-        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('up_vote', 'desc')->take(6)->get();//->Paginate(4, ['*'], "pageup$this->id");
+        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('up_vote', 'desc')->take(6)->get(); //->Paginate(4, ['*'], "pageup$this->id");
 
         return $comments;
     }
-    public function show()  {        //
-        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('created_at')->take(6)->get();//->Paginate(4, ['*'], "page$this->id");
+
+    public function show() {        //
+        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('created_at')->take(6)->get(); //->Paginate(4, ['*'], "page$this->id");
+
         return $comments;
     }
+
     public function showDownVote() {        //
-        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('down_vote', 'desc')->take(6)->get();//->Paginate(4, ['*'], "pagedown$this->id");
+        $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('down_vote', 'desc')->take(6)->get(); //->Paginate(4, ['*'], "pagedown$this->id");
 
         return $comments;
     }
+    
+    
 
 }
