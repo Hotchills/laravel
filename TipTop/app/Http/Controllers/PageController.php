@@ -9,6 +9,7 @@ use App\Comment;
 use Session;
 use App\Top;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\Rule;
 
 class PageController extends Controller {
 
@@ -23,14 +24,16 @@ class PageController extends Controller {
 
     public function index($main, $slug, Request $request) {
         //
-        $one = $slug;  
+        $one = $slug;
         $id = MainPage::where('name', $main)->first()->id;
 
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
 
             $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
+
+
             if ($request->ajax()) {
-              //  $top = Top::where('id', $returntyp)->first();
+                //  $top = Top::where('id', $returntyp)->first();
                 return view('TopsPage', ['tops' => $tops])->render();
             }
             return view('page', compact('main', 'page', 'tops'));
@@ -39,9 +42,9 @@ class PageController extends Controller {
     }
 
     public function index1($main) {
-              
+
         $MainPageid = MainPage::where('name', $main)->first()->id;
-        return view('/CreatePage',compact('MainPageid'));
+        return view('/CreatePage', compact('MainPageid'));
     }
 
     public function create() {
@@ -54,9 +57,16 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {      
+    public function store(Request $request) {
+
+        $validatedData = $request->validate([
+            'name' => ['required','min:3', 'max:50', Rule::unique('pages')->where('mainpage_id', $request->mainpage_id)],
+            'title' => ['required','min:3', 'max:100', Rule::unique('pages')->where('mainpage_id', $request->mainpage_id)],
+            'body' => 'max:500',
+        ]);
+
         $page = new Page();
-        $page->page_type=$request->page_type;
+        $page->page_type = $request->page_type;
         $page->name = $request->name;
         $page->title = $request->title;
         $page->body = $request->body;
@@ -64,20 +74,15 @@ class PageController extends Controller {
         $mainpage = MainPage::find($page->mainpage_id);
         $page->mainpage()->associate($mainpage);
         $page->save();
-        $page_id=$page->id;
-        $page_name=$page->name;
-        $mainpage_name=$mainpage->name;
-         $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
-        //   $tops=Top::where('page_name',$one)->get();
-       // Session::flash('success', 'page done');
-//if($page->page_type == '0')
- //       return view('AddTopsAfterCreatePage', ['Pagename' =>  $page->title,'PageID' =>  $page->id]);
-//elseif($page->page_type == '1')
-//     return view('/AddMovieInDB', compact('page_id','page_name','mainpage_name'));
-//else return view('/');
-    
-        //   return Redirect::back()->withInput();
-           return redirect()->action('TopController@index',['one' =>$mainpage->name,'page'=>$page->name,'tops'=>$tops]);
+
+        $page_id = $page->id;
+        $page_name = $page->name;
+        $mainpage_name = $mainpage->name;
+        $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
+
+        Session::flash('success', 'page done');
+
+        return redirect()->action('PageController@index', ['main' => $mainpage->name, 'page' => $page->name, 'tops' => $tops])->with('message', 'Success');
     }
 
     /**

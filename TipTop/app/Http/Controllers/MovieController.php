@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Movie;
 use App\Top;
 use App\Page;
+use App\MainPage;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MovieController extends Controller {
 
@@ -14,9 +16,13 @@ class MovieController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index($main, $page) {
         //
-        return view('AddMovieInDB');
+        $id = MainPage::where('name', $main)->first()->id;
+        $pagetemp = Page::where('mainpage_id', $id)->where('name', $page)->first();
+        $Pageid = $pagetemp->id;
+
+        return view('AddMovieInDB', compact('Pageid', 'main', 'page'));
     }
 
     /**
@@ -37,29 +43,39 @@ class MovieController extends Controller {
     public function store(Request $request) {
         //
         if ($request->ajax()) {
-
-            $top = new Top();
-            $top->page_id = $request->page_id;
-            $top->title = $request->title;
-            $top->body = '0';
-            $page = Page::find($top->page_id);
-            $top->page()->associate($page);
-            $top->save();
-
-
-            $movie = new Movie();
-            $movie->TMDBid = $request->TMDBid;
-            $movie->title = $request->title;
-            $movie->poster_path = $request->poster_path;
-            $movie->release_date = $request->release_date;
-            $movie->overview = $request->overview;
-            $movie->vote_average = $request->vote_average;
-            $movie->vote_count = $request->vote_count;
-            $movie->top_id = $top->id;
-            $movie->top()->associate($top);
-            $movie->save();
+           $validator = \Validator::make($request->all(),[
+                'title' => ['required', 'max:100', Rule::unique('tops')->where('page_id', $request->page_id)],
+            ]);
             
-             return response()->json(['msg' => $top->id]);
+            if ($validator->fails()) {
+                return response()->json(['errors' =>$validator->errors()->all()]);
+            } else {
+
+
+
+                $top = new Top();
+                $top->page_id = $request->page_id;
+                $top->title = $request->title;
+                $top->body = '0';
+                $page = Page::find($top->page_id);
+                $top->page()->associate($page);
+                $top->save();
+
+
+                $movie = new Movie();
+                $movie->TMDBid = $request->TMDBid;
+                $movie->title = $request->title;
+                $movie->poster_path = $request->poster_path;
+                $movie->release_date = $request->release_date;
+                $movie->overview = $request->overview;
+                $movie->vote_average = $request->vote_average;
+                $movie->vote_count = $request->vote_count;
+                $movie->top_id = $top->id;
+                $movie->top()->associate($top);
+                $movie->save();
+
+                return response()->json(['msg' => 'movie added']);
+            }
         }
     }
 

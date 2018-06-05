@@ -3,11 +3,7 @@
 @section('content')
 
 <div id="tag" class="firstmain">
-    @if (session()->has('message'))
-    <div class="alert alert-success">
-        {{ session()->get('message') }}
-    </div>
-    @endif
+
 
     <div class="flex-center">
         <h2 >
@@ -21,21 +17,20 @@
     <br>
 
     <section class="ShowTopsClass">
+    @if($page->page_type == 0)
         @include('TopsPage')
+        @endif
+    @if($page->page_type == 1)
+        @include('MoviesTopsPage')
+       @endif
     </section>
 
-
-    @if (session()->has('message'))
-    <div class="alert alert-success">
-        {{ session()->get('message') }}
-    </div>
-    @endif
     <br>
     @if($page->page_type == 0)
     <a href="{{route('CreateTop',['main'=> $page->mainpage->name ,'page' => $page->name ])}}">CreateTop</a>
     @endif
     @if($page->page_type == 1)
-    <a href="{{route('CreateTop',['main'=> $page->mainpage->name ,'page' => $page->name ])}}">AddMovie</a>
+    <a href="{{route('AddMovieInDB',['main'=> $page->mainpage->name ,'page' => $page->name ])}}">AddMovie</a>
     @endif
 </div>
 

@@ -265,8 +265,23 @@
             @include('layouts.menu')  
 
             <main style="padding:10px;border:1px solid Gainsboro;border-radius: 5px;">
-
-
+                
+    @if (session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+    @endif
+    
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<div class="alert alert-danger" style="display:none"></div>
                 @yield('content')
 
             </main>
@@ -281,7 +296,7 @@
         <script>
 $(document).ready(function () {
 
-
+   
     $(".commentid").detach().appendTo("#clickdoc");
 
     $('#clickdoc').on('click', '.top-heading', function () {
@@ -341,10 +356,11 @@ function upvotecomment(temp) {
         data: {commentid: commentid}
     })
             .done(function (data) {
-                //   console.log(data['likes']);
+                   console.log('merge');
+            console.log(data['likes']);
                 var likes = data['likes'];
                 document.getElementById('nr-up-vote-comment' + temp).innerHTML = likes;
-                //  console.log(data['dislikes']);
+                  console.log(data['dislikes']);
                 var dislikes = data['dislikes'];
                 document.getElementById('nr-down-vote-comment' + temp).innerHTML = dislikes;
             });
@@ -366,12 +382,13 @@ function downvotecomment(temp) {
     })
             .done(function (data) {
                 // console.log(data['message']);
-                //   console.log(data['likes']);
+                   console.log(data['likes']);
                 var likes = data['likes'];
                 document.getElementById('nr-up-vote-comment' + temp).innerHTML = likes;
-                //  console.log(data['dislikes']);
+                  console.log(data['dislikes']);
                 var dislikes = data['dislikes'];
                 document.getElementById('nr-down-vote-comment' + temp).innerHTML = dislikes;
+                
             });
 }
 function upvotetop(temp) {

@@ -23,11 +23,11 @@ Route::get('/', 'HomeController@index')->name('home');
 //Route::post('/topage', 'TestController@store');
 //Route::get('/{topage}', 'TopController@search');
 
-Route::get('/{main}/{page}/CreateTop',['as' => 'CreateTop' , 'uses' =>  'TopController@index1']);
-Route::get('/AddTopsAfterCreatePage', 'TopController@AddTopsAfterCreatePage')->name('AddTopsAfterCreatePage');
+Route::get('/UserProfile', 'UserProfileController@index')->name('UserProfile');
 Route::get('/CreateMainPage', 'MainPageController@index1')->name('CreateMainPage');
 Route::get('/{main}/CreatePage',['as' => 'CreatePage' , 'uses' => 'PageController@index1']);
-Route::get('/AddMovieInDB', 'MovieController@index');
+Route::get('/{main}/{page}/CreateTop',['as' => 'CreateTop' , 'uses' =>  'TopController@index1']);
+Route::get('/{main}/{page}/AddMovieInDB',['as' => 'AddMovieInDB' , 'uses' =>  'MovieController@index']);
 //dinamic :
 Route::get('/{main}', 'MainPageController@index');
 Route::get('/{main}/{slug}', 'PageController@index');
@@ -35,6 +35,7 @@ Route::get('/{main}/{slug}/{top}', 'TopController@index');
 
 
 //store :
+Route::post('/AddProfileInfo', ['uses'=> 'UserProfileController@store','as'=>'profileinfo.store' ]);
 Route::post('/CreatePage', ['uses'=> 'PageController@store','as'=>'page.store' ]);
 Route::post('/CreateTop', ['uses'=> 'TopController@store','as'=>'top.store' ]);
 Route::post('/CreateMainPage', ['uses'=> 'MainPageController@store','as'=>'mainpage.store' ]);

@@ -147,7 +147,10 @@
                     {{ Auth::user()->name }} <span class="caret"></span>
                 </a>
             </li>
-            <li >
+            <li>
+                <a href="{{ route('UserProfile') }}">Profile</a>
+            </li>
+            <li>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                    document.getElementById('logout-form').submit();">

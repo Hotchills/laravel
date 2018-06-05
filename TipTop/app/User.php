@@ -30,6 +30,10 @@ class User extends Authenticatable {
     public function comments() {
         return $this->hasMany('App\Comment', 'user_id', 'id');
     }
+    
+        public function tops() {
+        return $this->hasMany('App\Top', 'user_id', 'id');
+    }
 
     public function likes() {
         return $this->hasMany('App\Like');
@@ -46,5 +50,9 @@ class User extends Authenticatable {
     public function getName() {
         return $this->$name;
     }
+    public function userprofile() {
+        return $this->hasOne('App\UserProfile', 'user_id', 'id');
+    }
+    
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use Illuminate\Http\Request;
 use App\Top;
+use App\UserProfile;
 use App\Like;
 use Illuminate\Foundation\Auth\User;
 use Auth;
@@ -57,8 +58,20 @@ class CommentController extends Controller {
         $comment->body = $request->body;
         $comment->top()->associate($top);
         $comment->approuved = NULL; //1 - needs to be approuved by admin/moderator
-        $user = User::find($comment->user_id);
+        $user =  Auth::user();
         $comment->user()->associate($user);
+        if ($userprofile = UserProfile::where('user_id', $comment->user_id)->first()) {
+            $userprofile->increment('nr_comments');
+        } else {
+            $userprofile = new UserProfile;
+            $userprofile->country = 0;
+            $userprofile->user_id = Auth::user()->id;
+            $userprofile->overview = "";
+            $userprofile->nr_tops = 0;
+            $userprofile->nr_comments = 1;
+            $userprofile->user()->associate(Auth::user());
+        }
+        $userprofile->save();
         $comment->save();
         return redirect()->back()->with('message', 'Comment added');
     }
@@ -134,18 +147,9 @@ class CommentController extends Controller {
 
     public function incrementvote(Request $request) {
 
-        $request->all();
         $commentid = $request->commentid;
         $user = Auth::user();
 
-        // old like system -on comment field  
-        //    $temp = Comment::where('id', $commentid)->first();
-        //   if ($temp->up_vote === NULL) {
-        //        $temp->up_vote = 1;
-        //    } else {
-        //        $temp->increment('up_vote');
-        //   }
-        //   $temp->save();
         $like = Like::where('comment_id', $commentid)->where('user_id', $user->id)->first();
         if (count($like) > 0) {
             if ($like->like == 1) {
@@ -162,12 +166,17 @@ class CommentController extends Controller {
             $like->user_id = $user->id;
             $like->save();
         }
-      //  $likes=Like::where('comment_id', $commentid)->where('like','1')->count();
         $likes = $like->upvotescomment();
-       // $dislikes=Like::where('comment_id', $commentid)->where('like','2')->count();
+
         $dislikes = $like->downvotescomment();
+
+        $comment = Comment::find($request->commentid);
+        $comment->up_vote = $likes;
+        $comment->down_vote = $dislikes;
+        $comment->save();
+
         //    return response()->json(['status' => 'success'], 201);
-        return response()->json(['likes' => $likes,'dislikes' => $dislikes]);
+        return response()->json(['likes' => $likes, 'dislikes' => $dislikes]);
     }
 
     public function decrementvote(Request $request) {
@@ -175,15 +184,6 @@ class CommentController extends Controller {
         $request->all();
         $commentid = $request->commentid;
         $user = Auth::user();
-
-        // old dislike system done without user.
-        //$temp = Comment::where('id', $commentid)->first();
-        // if ($temp->down_vote === NULL) {
-        //     $temp->down_vote = 1;
-        // } else {
-        //     $temp->increment('down_vote');
-        // }
-        // $temp->save();
 
         $like = Like::where('comment_id', $commentid)->where('user_id', $user->id)->first();
         if (count($like) > 0) {
@@ -202,13 +202,15 @@ class CommentController extends Controller {
             $like->save();
         }
 
-        //    return response()->json(['status' => 'success'], 201);
-       // return response()->json(['message' => $like->like]);
-        
         $likes = $like->upvotescomment();
         $dislikes = $like->downvotescomment();
-        return response()->json(['likes' => $likes,'dislikes' => $dislikes]);
-        
+
+        $comment = Comment::find($request->commentid);
+        $comment->up_vote = $likes;
+        $comment->down_vote = $dislikes;
+        $comment->save();
+
+        return response()->json(['likes' => $likes, 'dislikes' => $dislikes]);
     }
 
 }

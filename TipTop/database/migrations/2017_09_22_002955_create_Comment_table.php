@@ -14,6 +14,7 @@ class CreateCommentTable extends Migration
     public function up()
     {
          Schema::defaultStringLength(191);
+         
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();

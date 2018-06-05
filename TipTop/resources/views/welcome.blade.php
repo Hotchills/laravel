@@ -10,11 +10,9 @@
             Laravel
         </div>
         <div class="links">
-            <h2>Create new : </h2>
+            <h2>Create new mainpage: </h2> <a href="{{route('CreateMainPage')}}">Create new mainpage</a>
            
-            <a href="{{route('CreateMainPage')}}">CreateMainPage</a>
-            <a href="{{route('CreatePage')}}">CreatePage</a>
-             <a href="{{route('CreateTop')}}">CreateTop</a>
+
 
         </div>
         <br>

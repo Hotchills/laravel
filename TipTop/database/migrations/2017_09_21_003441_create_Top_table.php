@@ -19,6 +19,7 @@ class CreateTopTable extends Migration
             $table->text('body');            
             $table->text('title');
             $table->integer('page_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->integer('up_votes')->nullable();
             $table->integer('down_votes')->nullable();
             $table->integer('comment_nr')->nullable();
@@ -27,6 +28,7 @@ class CreateTopTable extends Migration
         Schema::table('tops', function (Blueprint $table)
                 {
           $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
+          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         }); 
     }
 
@@ -39,6 +41,7 @@ class CreateTopTable extends Migration
     {
      Schema::table('tops', function (Blueprint $table) {
         $table->dropForeign(['page_id']);
+        $table->dropForeign(['user_id']);
     });
         Schema::dropIfExists('tops');
     }

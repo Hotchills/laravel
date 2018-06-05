@@ -7,18 +7,16 @@
     <div class="form-inline">
         {{Form::open(['route'=>'top.store','method'=>'POST'])}}
 
-
-        
         {{Form::hidden('page_id',$Pageid)}}
     </div>
 
     <div class="form-inline">
-        {{Form::label('titletop','Insert the Title:')}}
-        {{Form::text('titletop','Title',['class'=>'form-control'])}}
+        {{Form::label('title','Insert the Title:')}}
+        {{Form::text('title','',['class'=>'form-control'])}}
     </div>
     <div class="form-inline">
-        {{Form::label('bodytop','Body info:')}}
-        {{Form::textarea('bodytop','Body',['class'=>'form-control','rows'=>'7'])}}
+        {{Form::label('body','Body info:')}}
+        {{Form::textarea('body','',['class'=>'form-control','rows'=>'7'])}}
     </div>
     
    

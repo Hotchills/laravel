@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+
 <div style=" margin: auto;width: 50%;">
 
     <div class="form-inline">

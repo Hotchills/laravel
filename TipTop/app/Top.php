@@ -18,13 +18,16 @@ class Top extends Model {
     public function movie() {
         return $this->hasOne('App\Movie', 'top_id', 'id');
     }
+    public function user() {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
 
     public function comments() {
         return $this->hasMany('App\Comment', 'top_id', 'id');
     }
 
     public function liketops() {
-        return $this->hasMany('App\LikeTop');
+        return $this->hasMany('App\LikeTop', 'top_id', 'id');
     }
     
     public function upvotestop()
@@ -52,7 +55,6 @@ class Top extends Model {
 
     public function showDownVote() {        //
         $comments = Comment::where('top_id', $this->id)->whereNull('approuved')->whereNull('replay_id')->orderBy('down_vote', 'desc')->take(6)->get(); //->Paginate(4, ['*'], "pagedown$this->id");
-
         return $comments;
     }
     

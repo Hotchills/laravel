@@ -6,9 +6,11 @@ use App\Top;
 use Illuminate\Http\Request;
 use Session;
 use App\Page;
+use App\UserProfile;
 use App\MainPage;
 use Auth;
 use App\LikeTop;
+use Illuminate\Validation\Rule;
 
 class TopController extends Controller {
 
@@ -21,13 +23,13 @@ class TopController extends Controller {
         $this->middleware('auth');
     }
 
-    public function index1($main,$page) {
+    public function index1($main, $page) {
         //
         $id = MainPage::where('name', $main)->first()->id;
         $page = Page::where('mainpage_id', $id)->where('name', $page)->first();
         $Pageid = $page->id;
-        
-        return view('CreateTop',compact('Pageid'));
+
+        return view('CreateTop', compact('Pageid'));
     }
 
     public function index($main, $slug, $top, Request $request) {
@@ -39,7 +41,7 @@ class TopController extends Controller {
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
 
             $toptemp = Top::where('page_id', $page->id)->where('title', $top)->first();
-            
+
             return view('SingleTopPage', compact('main', 'page', 'toptemp'));
         }
         abort(404);
@@ -62,22 +64,42 @@ class TopController extends Controller {
      */
     public function store(Request $request) {
 
+
+        $validatedData = $request->validate([
+            'title' => ['required', 'max:100', Rule::unique('tops')->where('page_id', $request->page_id)],
+            'body' => 'required|max:1000',
+        ]);
+
         $top = new Top();
         $top->page_id = $request->page_id;
-        $top->title = $request->titletop;
-        $top->body = $request->bodytop;
+        $top->title = $request->title;
+        $top->body = $request->body;
+        $top->user_id = Auth::id();
         $page = Page::find($top->page_id);
-        $top->page()->associate($page);        
+        $top->page()->associate($page);
         $top->save();
         $mainpage = MainPage::find($page->mainpage_id);
         $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
-        Session::flash('success', 'page done');
-       
-          //  return view('/AddTopsAfterCreatePage', ['Pagename' =>  $page->title,'PageID' =>  $page->id]);     
-        return redirect()->action('TopController@index',['one' =>$mainpage->name,'page'=>$page->name,'tops'=>$tops]);
+        $user = Auth::user();
+        $top->user()->associate($user);
+
+        if ($userprofile = UserProfile::where('user_id', $top->user_id)->first()) {
+            $userprofile->increment('nr_tops');
+        } else {
+            $userprofile = new UserProfile;
+            $userprofile->country = $request->country;
+            $userprofile->user_id = Auth::user()->id;
+            $userprofile->overview = "";
+            $userprofile->nr_tops = 1;
+            $userprofile->nr_comments = 0;
+            $userprofile->user()->associate(Auth::user());
+        }
+        $userprofile->save();
+
+        //  return view('/AddTopsAfterCreatePage', ['Pagename' =>  $page->title,'PageID' =>  $page->id]);     
+        return redirect()->action('PageController@index', ['main' => $mainpage->name, 'page' => $page->name, 'tops' => $tops])->with('message', 'Success');
     }
-    
-   
+
     /**
      * Display the specified resource.
      *
@@ -116,12 +138,6 @@ class TopController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy(Top $top) {
-        //
-    }
-
-    public function AddTopsAfterCreatePage() {
-
-        return view('AddTopsAfterCreatePage');
         //
     }
 
@@ -179,6 +195,7 @@ class TopController extends Controller {
         $likes = $like->upvotestop();
         $dislikes = $like->downvotestop();
         //    return response()->json(['status' => 'success'], 201);
+        
         return response()->json(['likes' => $likes, 'dislikes' => $dislikes]);
     }
 

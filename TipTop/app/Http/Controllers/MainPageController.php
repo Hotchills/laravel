@@ -6,6 +6,7 @@ use App\MainPage;
 use Illuminate\Http\Request;
 use Session;
 use App\Page;
+use Illuminate\Validation\Rule;
 
 class MainPageController extends Controller {
 
@@ -19,12 +20,10 @@ class MainPageController extends Controller {
      $this->middleware('auth',['except'=>'index']); 
    }
     public function index($main) {
-        //   $pages=Page::all();
 
-        if ($mainpage = MainPage::where('name', $main)->first()) {
-            //    $pages=Page::where('mainpage_id',$mainpage->id)->get();        
-            $id = $mainpage->id;
-            $pages = MainPage::find($id)->pages;
+
+        if ($mainpage = MainPage::where('name', $main)->first()) {       
+            $pages = $mainpage->pages;
             return view('mainpage', compact('mainpage', 'pages'));
         }
         abort(404);
@@ -51,19 +50,23 @@ class MainPageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        
+       $validatedData = $request->validate([
+        'title' => 'required|unique:mainpage|max:100|min:3',
+        'name'=> 'required|unique:mainpage|max:40|min:3',
+        'body' => 'max:500',
+        ]);
+         
         $mainpage = new MainPage();
         $mainpage->name = $request->name;
         $mainpage->title = $request->title;
         $mainpage->body = $request->body;
         $mainpage->save();
-        Session::flash('success', 'page done');
+      
+        
+        return redirect()->action('MainPageController@index',['main'=>$mainpage->name])->with('message', 'Success');
 
-
-
-        //   return Redirect::back()->withInput();
-
-      //  return view('/CreateMainPage');
-          return redirect()->action('MainPageController@index',['main'=>$mainpage->name]);
+    
     }
 
     /**
