@@ -30,8 +30,6 @@ class PageController extends Controller {
         if ($page = Page::where('mainpage_id', $id)->where('name', $one)->first()) {
 
             $tops = Top::where('page_id', $page->id)->orderBy('id')->paginate(5);
-
-
             if ($request->ajax()) {
                 //  $top = Top::where('id', $returntyp)->first();
                 return view('TopsPage', ['tops' => $tops])->render();
@@ -46,7 +44,7 @@ class PageController extends Controller {
         $MainPageid = MainPage::where('name', $main)->first()->id;
         return view('/CreatePage', compact('MainPageid'));
     }
-
+    
     public function create() {
         
     }

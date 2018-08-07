@@ -3,7 +3,7 @@
 @section('content')
 
 <h1>General Account Settings</h1>
-<table class="table"Style="">
+<table class="table">
     <tbody>
         <tr>
             <td class="col-md-4"> User ID</td>

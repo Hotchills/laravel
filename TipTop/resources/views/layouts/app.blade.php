@@ -15,7 +15,9 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
 
-        <!-- Styles -->
+        <!-- tinymce -Editor  -->
+        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=pr6pj7rmersy5v4ymrd94bcw081ugpp9u9cg7yufsfr1rjvg"></script>
+        <script>tinymce.init({selector: '.tinymxetextarea', menubar: false});</script>
         <style>
             <!-- Styles laravel welocome page-->
 
@@ -182,7 +184,7 @@
                 float:left;
 
             }
-            .panel {
+            .panel-com {
                 height: 100%;
                 position:relative;
                 left:15px;
@@ -200,7 +202,7 @@
                 width:100%;
                 float:left;
             }
-            .panel>.panel-heading:after,.panel>.panel-heading:before{
+            .panel-com>.panel-heading:after,.panel-com>.panel-heading:before{
                 position:absolute;
                 top:11px;left:-16px;
                 right:100%;
@@ -212,13 +214,13 @@
                 border-style:solid solid outset;
                 pointer-events:none;
             }
-            .panel>.panel-heading:after{
+            .panel-com>.panel-heading:after{
                 border-width:7px;
                 border-right-color:#f7f7f7;
                 margin-top:1px;
                 margin-left:2px;
             }
-            .panel>.panel-heading:before{
+            .panel-com>.panel-heading:before{
                 border-right-color:#ddd;
                 border-width:8px;
             }
@@ -238,8 +240,8 @@
                     line-height: 1.2;
                 }
             }
-             <!-- Styles laravel add movie in DB -->
-            
+            <!-- Styles laravel add movie in DB -->
+
             #show-movies{
                 list-style-type: none;
                 height: auto;
@@ -261,27 +263,33 @@
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container" Style="">
+            <div class="jumbotron" Style="margin:0px;">
+                <h1> Welcome to DO YOUR TOP Beta </h1> 
+            </div>
             @include('layouts.menu')  
+        </div>
 
+
+        <div class="container">
             <main style="padding:10px;border:1px solid Gainsboro;border-radius: 5px;">
-                
-    @if (session()->has('message'))
-    <div class="alert alert-success">
-        {{ session()->get('message') }}
-    </div>
-    @endif
-    
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-<div class="alert alert-danger" style="display:none"></div>
+
+                @if (session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+                @endif
+
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <div class="alert alert-danger" style="display:none"></div>
                 @yield('content')
 
             </main>
@@ -296,7 +304,7 @@
         <script>
 $(document).ready(function () {
 
-   
+
     $(".commentid").detach().appendTo("#clickdoc");
 
     $('#clickdoc').on('click', '.top-heading', function () {
@@ -321,6 +329,11 @@ $(document).ready(function () {
         var id = Number($(this).attr('id').slice(13));
         //   console.log(id);
         downvotetop(id);
+    });
+    $('.comment-body-button').click(function () {
+        var id = Number($(this).attr('id').slice(19));
+        // console.log(id);
+        showfullcomment(id);
     });
 
 });
@@ -356,11 +369,11 @@ function upvotecomment(temp) {
         data: {commentid: commentid}
     })
             .done(function (data) {
-                   console.log('merge');
-            console.log(data['likes']);
+                console.log('merge');
+                console.log(data['likes']);
                 var likes = data['likes'];
                 document.getElementById('nr-up-vote-comment' + temp).innerHTML = likes;
-                  console.log(data['dislikes']);
+                console.log(data['dislikes']);
                 var dislikes = data['dislikes'];
                 document.getElementById('nr-down-vote-comment' + temp).innerHTML = dislikes;
             });
@@ -382,13 +395,13 @@ function downvotecomment(temp) {
     })
             .done(function (data) {
                 // console.log(data['message']);
-                   console.log(data['likes']);
+                console.log(data['likes']);
                 var likes = data['likes'];
                 document.getElementById('nr-up-vote-comment' + temp).innerHTML = likes;
-                  console.log(data['dislikes']);
+                console.log(data['dislikes']);
                 var dislikes = data['dislikes'];
                 document.getElementById('nr-down-vote-comment' + temp).innerHTML = dislikes;
-                
+
             });
 }
 function upvotetop(temp) {
@@ -433,23 +446,16 @@ function downvotetop(temp) {
             });
 }
 
-function deletecomment(temp) {
-
-    var commentid = temp;
-
-    $.ajax({
-        method: "POST",
-        url: 'http://127.0.0.1:8000/deletecomment',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {commentid: commentid}
-    })
-            .done(function (msg) {
-                console.log(msg['message']);
-            });
-}
 function editcomment(temp) {
+
+    document.getElementById('comment-body' + temp).style.display = "none";
+    document.getElementById('comment-edit' + temp).style.display = "block";
+    document.getElementById('comment-editbutton' + temp).style.display = "none";
+
+}
+function showfullcomment(temp) {
+    document.getElementById('comment-body-button' + temp).style.display = "none";
+    document.getElementById('comment-body-full' + temp).style.display = "block";
 
 }
 

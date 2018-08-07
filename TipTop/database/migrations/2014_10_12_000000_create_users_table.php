@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->unsignedTinyInteger('state')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->boolean('isAdmin')->nullable();
         });
     }
 

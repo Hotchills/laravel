@@ -15,29 +15,45 @@
         <h2 >
             Page name : {{$mainpage->name}}
         </h2></div>
-    <div class="flex-center">
+    
+    
+    <div class="panel panel-info">
         <div class="panel-heading"><p>Page title : {{$mainpage->title}}</p></div>
-        <div class="panel-heading"><p>Page Body : {{$mainpage->body}}</p></div>
+        <div class="panel-body" Style="word-wrap: break-word;" ><p>Page Body :</p> {!!$mainpage->body!!}</div>
     </div>
+    <br>
     <h3>Pages on this category:</h3>
     <br>
 
-    @foreach($pages as $page)    
+    <table class="table" Style="width: 70%;">
+    <tbody>
 
-    <div Style="margin-left:20px;">----------------</div>   
+    @foreach($pages as $page)   
+    <tr>
+            <td class="col-md-4"> 
+    <a href="/{{$mainpage->name}}/{{$page->name}}">{{$page->title}}</a>
+    {{substr(strip_tags($page->body),0,100)}} 
+    @if (strlen(strip_tags($page->body)) > 100)     
+         <a href="/{{$mainpage->name}}/{{$page->name}}">...</a>        
+    @endif
+   
+    </td>
+    </tr>
+    
 
-    <div Style="float:left;margin-left:20px;"><a href="/{{$mainpage->name}}/{{$page->name}}">{{$page->title}}</a></div>
-    <div Style="float:left;margin-left:20px;">{{$page->body}}</div>
-    <br> 
     @endforeach 
-
+    <tr><td></td></tr>
+    </tbody>
+</table>
+    
+    
+    
     @if (session('status'))
     <div class="alert alert-success">
         {{ session('status') }}
     </div>
     @endif
-    <br>
-    <br>
+
     <a href="{{route('CreatePage',['main'=>$mainpage->name])}}">CreatePage</a>
 </div>
 @endsection

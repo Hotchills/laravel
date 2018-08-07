@@ -1,10 +1,6 @@
 
-<div class=" jumbotron" Style="margin-top:0px;margin-bottom:5px;">
-    <h2>Welcome to DO YOUR TOP Beta </h2>
 
-</div>
-
-<nav class="navbar navbar-default" style="background-color:	#BEBEBE;">
+<nav class="navbar navbar-default" style="background-color:#BEBEBE;">
     <div class="navbar-header">
         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -15,10 +11,7 @@
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
-
-
     </div>
-
 
     <div class="collapse navbar-collapse js-navbar-collapse " >
 
@@ -112,54 +105,64 @@
             <li class="dropdown ">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">login <span class="caret"></span></a>				
                 <ul class="dropdown-menu ">   
-                   
-                        <form  method="POST" action="{{ route('login') }} " >
-                            {{ csrf_field() }}
-                            <div class="form-group mb-2 {{ $errors->has('login') ? ' has-error' : '' }}">    
-                                <input class="form-control" type="text"  name="login" placeholder="E-Mail/User" required autofocus>
 
-                                @if ($errors->has('email'))
-                                <strong>{{ $errors->first('login') }}</strong>
-                                @endif
-                            </div>
+                    <form  method="POST" action="{{ route('login') }} " >
+                        {{ csrf_field() }}
+                        <div class="form-group mb-2 {{ $errors->has('login') ? ' has-error' : '' }}">    
+                            <input class="form-control" type="text"  name="login" placeholder="E-Mail/User" required autofocus>
 
-                            <div class="form-group mx-sm-3 mb-2 {{ $errors->has('password') ? ' has-error' : '' }}">
-                                <input class="form-control" type="password" placeholder="Password" name="password" required> 
-                                @if ($errors->has('password'))
-                                <strong>{{ $errors->first('password') }}</strong>
-                                @endif
+                            @if ($errors->has('email'))
+                            <strong>{{ $errors->first('login') }}</strong>
+                            @endif
+                        </div>
 
-                            </div>
-                            <button class="btn btn-primary " type="submit">Login</button>    
+                        <div class="form-group mx-sm-3 mb-2 {{ $errors->has('password') ? ' has-error' : '' }}">
+                            <input class="form-control" type="password" placeholder="Password" name="password" required> 
+                            @if ($errors->has('password'))
+                            <strong>{{ $errors->first('password') }}</strong>
+                            @endif
 
-                          
-                        </form>
-                     <button style=" position: absolute;bottom: 5px;right: 0px;" class="btn btn-primary" href="{{ route('register') }}">{{ __('Register') }}</button>
-           
+                        </div>
+                        <button class="btn btn-primary " type="submit">Login</button>    
+
+
+                    </form>
+                    <button style=" position: absolute;bottom: 5px;right: 0px;" class="btn btn-primary" href="{{ route('register') }}">{{ __('Register') }}</button>
+
                 </ul>
             </li>
         </ul>
 
         @else
         <ul class="nav navbar-nav navbar-right" >  
-            <li >
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                    {{ Auth::user()->name }} <span class="caret"></span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('UserProfile') }}">Profile</a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="{{ route('logout') }}"
-                   onclick="event.preventDefault();
-                                   document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
-                </a>
+            <li class="dropdown "> 
+                
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                        {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
+                <ul class="dropdown-menu ">  
+                    @if(Auth::user()->isAdmin == 1)
+                    <li>
+                        <a href="{{ route('admin') }}">ProfileAd</a>
+                    </li>
+                    @else
+                    <li>
+                        <a href="{{ route('UserProfile') }}">Profile</a>
+                    </li>
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
+                    @endif
+                    <li>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                           document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+                </ul>
             </li>
         </ul>
 

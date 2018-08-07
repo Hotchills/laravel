@@ -16,7 +16,7 @@
     </div>
     <div class="form-inline">
         {{Form::label('body','Body info:')}}
-        {{Form::textarea('body','',['class'=>'form-control','rows'=>'7'])}}
+        {{Form::textarea('body','',['class'=>'form-control tinymxetextarea','rows'=>'7'])}}
     </div>
     
    

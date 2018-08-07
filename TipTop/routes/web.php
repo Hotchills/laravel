@@ -16,6 +16,7 @@
 
 
 Auth::routes();
+Route::get('/admin', 'HomeController@admin')->middleware('admin')->name('admin');
 
 Route::get('/', 'HomeController@index')->name('home');
 
@@ -43,7 +44,8 @@ Route::post('/{top_id}/comment' , ['uses'=> 'CommentController@store','as'=>'com
 Route::post('/{top_id}/{parent_id}/comment' , ['uses'=> 'CommentController@storereplay','as'=>'comment.storereplay' ]);
 Route::post('/incrementvote' , 'CommentController@incrementvote');
 Route::post('/decrementvote' , 'CommentController@decrementvote');
-Route::post('/deletecomment' , 'CommentController@deletecomment');
+Route::delete('/deletecomment' , ['uses'=>'CommentController@deletecomment','as'=>'comment.delete' ]);
+Route::put('/editcomment' , ['uses'=>'CommentController@editcomment','as'=>'comment.edit' ]);
 Route::post('/incrementvotetop' , 'TopController@incrementvotetop');
 Route::post('/decrementvotetop' , 'TopController@decrementvotetop');
 Route::post('/StoreMovietTop', 'MovieController@store');

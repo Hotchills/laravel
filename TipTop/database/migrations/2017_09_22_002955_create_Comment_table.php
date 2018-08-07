@@ -21,7 +21,7 @@ class CreateCommentTable extends Migration
             $table->text('body');
             $table->integer('top_id')->unsigned();
             $table->integer('replay_id')->unsigned()->nullable();// id to the reply comment
-            $table->unsignedTinyInteger('approuved')->nullable()->default('0');
+            $table->unsignedTinyInteger('approuved')->nullable();//0-default , 1 - needs to be approuved by admin/moderator 2 - show comment 3 - deleted
             $table->integer('up_vote')->unsigned()->nullable()->default('0');
             $table->integer('down_vote')->unsigned()->nullable()->default('0');
             $table->timestamps();

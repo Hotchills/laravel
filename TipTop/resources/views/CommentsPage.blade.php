@@ -37,7 +37,12 @@
                 @if(Auth::user()->name != $comment->user->name)
                 <button class="btn btn-primary" onclick="show_commentreplay({{$comment->id}})">Replay</button>  
                 @else
-                <button type="button" class=" btn btn-warning pull-right btn-sm" onclick="deletecomment({{$comment->id}})" >Delete</button>
+
+                {{Form::open(['route'=>'comment.delete','method'=>'DELETE'])}}
+                {{Form::hidden('commentid',$comment->id)}}
+                {{Form::submit('Delete',['class'=>'btn btn-warning pull-right btn-sm'])}}    
+                {{ Form::close() }}
+
                 <button type="button" class=" btn btn-info pull-right btn-sm" onclick="editcomment({{$comment->id}})" >Edit</button>
                 @endif
 

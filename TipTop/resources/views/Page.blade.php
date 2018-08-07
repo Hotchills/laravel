@@ -10,10 +10,12 @@
             Page name :{!! $page->title !!} 
         </h2></div>
        <div class="flex-center">
-        <div class="panel-heading"><p>  Main page : {!! $page->mainpage->name !!}&nbsp |&nbsp  Title : {{$page->title}}&nbsp| &nbsp   Body : {{$page->body}}</p></span>  
+        <div class="panel-heading"><p>  Main page : {!! $page->mainpage->name !!}  Title : {{$page->title}}</p>
         </div>
     </div>
-    
+    <div Style="word-wrap: break-word;">
+    {!! $page->body !!}
+     </div>
     <br>
 
     <section class="ShowTopsClass">

@@ -9,6 +9,7 @@ use App\UserProfile;
 use App\Like;
 use Illuminate\Foundation\Auth\User;
 use Auth;
+use Purifier;
 
 class CommentController extends Controller {
 
@@ -23,6 +24,11 @@ class CommentController extends Controller {
       $this->middleware('auth',['except'=>'store']);
       }
      */
+    public function __construct() {
+        $this->middleware('auth', ['except' => 'index']);
+    }
+    
+    
     public function index($top_id) {
         //
         $top = Top::find($top_id);
@@ -55,9 +61,9 @@ class CommentController extends Controller {
         $comment = new Comment();
         $comment->replay_id = NULL;
         $comment->user_id = $u_id;
-        $comment->body = $request->body;
+        $comment->body = Purifier::clean($request->body);
         $comment->top()->associate($top);
-        $comment->approuved = NULL; //1 - needs to be approuved by admin/moderator
+        $comment->approuved = 1; //0-default , 1 - needs to be approuved by admin/moderator 2 - show comment 3 - deleted
         $user =  Auth::user();
         $comment->user()->associate($user);
         if ($userprofile = UserProfile::where('user_id', $comment->user_id)->first()) {
@@ -87,10 +93,11 @@ class CommentController extends Controller {
         $comment = new Comment();
         $comment->replay_id = $parent_id;
         $comment->user_id = $u_id;
-        $comment->body = $request->body;
+        $comment->body =Purifier::clean($request->body);
         $comment->top()->associate($top);
         $user = User::find($comment->user_id);
         $comment->user()->associate($user);
+        $comment->approuved = 1; //0-default , 1 - needs to be approuved by admin/moderator 2 - show comment 3 - deleted
 
         $comment->save();
         return redirect()->back()->with('message', 'Comment added');
@@ -112,7 +119,14 @@ class CommentController extends Controller {
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment) {
+    public function editcomment(Request $request) {
+        
+        $temid=$request->commentid;
+        $comment=Comment::where('id', $temid)->first();
+        $comment->body=Purifier::clean($request->body);
+        $comment->save();
+        
+         return redirect()->back()->with('message', 'Comment edit done');
         //
     }
 
@@ -125,6 +139,8 @@ class CommentController extends Controller {
      */
     public function update(Request $request, Comment $comment) {
         //
+        
+        
     }
 
     /**
@@ -139,10 +155,10 @@ class CommentController extends Controller {
         $temp = $request->commentid;
         $comment = Comment::where('id', $temp)->first();
         //   $comment=Comment::where($temp,'id')->get();
-        $comment->approuved = 2; // do not whow comment
+        $comment->approuved = 3;//0-show  , 1 - needs to be approuved by admin/moderator 2 -  / 3 - deleted
         $comment->save();
 
-        return response()->json(['message' => $comment->id]);
+        return redirect()->back()->with('message', 'Comment deleted');
     }
 
     public function incrementvote(Request $request) {

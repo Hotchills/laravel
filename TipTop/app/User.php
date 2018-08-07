@@ -17,7 +17,9 @@ class User extends Authenticatable {
     protected $fillable = [
         'name', 'username', 'email', 'password',
     ];
-
+    protected $casts = [
+        'isAdmin' => 'integer',
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -26,6 +28,9 @@ class User extends Authenticatable {
     protected $hidden = [
         'password', 'remember_token',
     ];
+    public function isAdmin(){
+        return $this->isAdmin;     
+    }
 
     public function comments() {
         return $this->hasMany('App\Comment', 'user_id', 'id');
@@ -48,7 +53,7 @@ class User extends Authenticatable {
     }
 
     public function getName() {
-        return $this->$name;
+        return $this->name;
     }
     public function userprofile() {
         return $this->hasOne('App\UserProfile', 'user_id', 'id');

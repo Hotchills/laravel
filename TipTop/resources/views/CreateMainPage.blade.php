@@ -18,7 +18,7 @@
     </div>           
     <div class="form-inline">
         {{Form::label('body','body:')}}
-        {{Form::textarea('body','Body',['class'=>'form-control','rows'=>'7'])}}
+        {{Form::textarea('body','Body',['class'=>'form-control tinymxetextarea','rows'=>'7'])}}
     </div>
     {{Form::submit('Add main page',['class'=>'btn btn-primary'])}}    
 

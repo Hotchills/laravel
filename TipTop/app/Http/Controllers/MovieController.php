@@ -21,7 +21,6 @@ class MovieController extends Controller {
         $id = MainPage::where('name', $main)->first()->id;
         $pagetemp = Page::where('mainpage_id', $id)->where('name', $page)->first();
         $Pageid = $pagetemp->id;
-
         return view('AddMovieInDB', compact('Pageid', 'main', 'page'));
     }
 
@@ -50,17 +49,14 @@ class MovieController extends Controller {
             if ($validator->fails()) {
                 return response()->json(['errors' =>$validator->errors()->all()]);
             } else {
-
-
-
                 $top = new Top();
                 $top->page_id = $request->page_id;
+                $top->user_id = $request->user_id;
                 $top->title = $request->title;
                 $top->body = '0';
                 $page = Page::find($top->page_id);
                 $top->page()->associate($page);
                 $top->save();
-
 
                 $movie = new Movie();
                 $movie->TMDBid = $request->TMDBid;

@@ -67,6 +67,7 @@ type: 'GET',
         var vote_average = json.results[numberobj].vote_average;
         var vote_count = json.results[numberobj].vote_count;
         var page_id = {{$Pageid}};
+        var user_id = {{Auth::id()}};
         console.log(page_id);
         //console.log(json.results[numberobj].id);
         //   console.log(json.results[numberobj].title);
@@ -83,17 +84,17 @@ type: 'GET',
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 //  data: {savedmovie: JSON.stringify(savedmovie)}
-                data: { page_id:page_id, TMDBid: TMDBid, title:title, poster_path:poster_path, release_date:release_date, overview:overview, vote_average:vote_average, vote_count:vote_count  }
+                data: { user_id:user_id ,page_id:page_id, TMDBid: TMDBid, title:title, poster_path:poster_path, release_date:release_date, overview:overview, vote_average:vote_average, vote_count:vote_count  }
         })
                 .done(function (data) {
                 console.log(data.msg);
                 console.log(data['message']);
-                if(data.errors){
-                 		jQuery.each(data.errors, function(key, value){
-                  			jQuery('.alert-danger').show();
-                  			jQuery('.alert-danger').append('<p>'+value+'</p>');
-                  		});
-                }else{
+                if (data.errors){
+                jQuery.each(data.errors, function(key, value){
+                jQuery('.alert-danger').show();
+                jQuery('.alert-danger').append('<p>' + value + '</p>');
+                });
+                } else{
                 window.location = 'http://127.0.0.1:8000/{{$main}}/{{$page}}';
                 }
                 })
